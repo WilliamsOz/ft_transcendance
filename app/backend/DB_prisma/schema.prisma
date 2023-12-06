@@ -1,0 +1,154 @@
+// schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int    @id @default(autoincrement())
+  login42  String @unique
+  email String @unique
+  image_url String
+  name String
+  status String
+
+  Blocked_user Blocked[] @relation("Blocked_user_id")
+  Blocker_user Blocked[] @relation("Blocker_user_id")
+  user_friend_1 Friends[] @relation("user_id_1")
+  user_friend_2 Friends[] @relation("user_id_2")
+  user_1 Game[] @relation("user_id_1")
+  user_2 Game[] @relation("user_id_2")
+  
+  game_invitations Game_invitation[] @relation("game_invitation_id")
+
+
+}
+
+model Blocked {
+  id    Int    @id @default(autoincrement())
+  Blocker_user_id Int
+  Blocked_user_id Int
+  
+  Blocked_user User @relation("Blocked_user_id", fields: [Blocked_user_id], references: [id]) // Je declare une relation entre Blocked_user_id et id de User
+  Blocker_user User @relation("Blocker_user_id", fields: [Blocker_user_id], references: [id]) // Je declare une relation entre Blocker_user_id et id de User
+}
+
+model Friends {
+  id Int @id @default(autoincrement())
+  user_id_1 Int
+  user_id_2 Int
+  
+  user_friend_1 User @relation("user_id_1", fields: [user_id_1], references: [id]) // Je declare une relation entre Blocked_user_id et id de User
+  user_friend_2 User @relation("user_id_2", fields: [user_id_2], references: [id]) // Je declare une relation entre Blocker_user_id et id de User
+}
+
+model Game {
+  id    Int    @id @default(autoincrement())
+  user_id_1 Int
+  user_id_2 Int
+  winner_id Int
+  type  String
+  
+  user_1 User @relation("user_id_1", fields: [user_id_1], references: [id]) // Je declare une relation entre user_id_1 et id de User
+  user_2 User @relation("user_id_2", fields: [user_id_2], references: [id]) // Je declare une relation entre user_id_2 et id de User
+
+}
+model Game_invitation {
+  id             Int        @id @default(autoincrement())
+  sender_id      Int        
+  discussion_id  Int
+  date           DateTime
+  status         String
+  
+  sender         Discussion @relation(name: "user_id_1", fields: [sender_id], references: [user_id_1]) // relation sender_id a user_id_1(discussion)
+  game_invitation_id User @relation(name: "game_invitation_id", fields: [discussion_id], references: [id]) // relation game_invitation_id a (User)
+}
+
+// model Discussion {
+//   id        Int               @id @default(autoincrement())
+//   user_id_1 Int               @unique
+//   user_id_2 Int
+//   date      DateTime
+//   user_1    Game_invitation[] @relation(name: "user_id_1") // relation user_id_1 a sender_id(game_invitation)
+//   user_mute Mutes[] @relation(name: "user_1") // relation user_id_1 a sender_id(game_invitation)
+//  // Ajouter la relation many-to-many avec Message
+//   messages  Message[]         @relation("DiscussionToMessage", references: [discussion_id])
+// }
+// Relation Many to many entre Discussion et Message 
+// 1 -- discussion peut avoir plusieurs messages donc many to many 
+// Il faut creer une table de jonction dites Intermediaire entre Discussion et Message
+// Cette table de jonction va contenir les id de Discussion et de Message
+// 2 -- Ajouter les relations dans les tables Discussion et Message a la table de jonction
+
+model Message {
+  id            Int        @id @default(autoincrement())
+  content       String
+  date          DateTime
+  sender_id     Int
+
+  discussion_id Int?          // Champ optionnel
+  channel_id    Int?          // Champ optionnel
+  message_id    Int?          // Champ optionnel
+  messages      DiscussionMessage[]
+
+}
+
+model Discussion {
+  id            Int               @id @default(autoincrement())
+  user_id_1     Int               @unique
+  user_id_2     Int
+  date          DateTime
+  user_1        Game_invitation[] @relation(name: "user_id_1") // relation user_id_1 à sender_id(game_invitation)
+  user_mute     Mutes[]           @relation(name: "user_1") // relation user_id_1 à sender_id(game_invitation)
+  messages      DiscussionMessage[]
+}
+
+model DiscussionMessage {
+  discussion_id Int
+  channel_id    Int
+  message_id    Int
+
+  message       Message    @relation(fields: [message_id], references: [id])
+  discussion    Discussion @relation(fields: [discussion_id], references: [id])
+  // channel       Message    @relation(fields: [channel_id], references: [id]) // Remet lors de la creation table channel
+
+  @@id([discussion_id, channel_id, message_id], name: "composite_id")
+}
+
+// model Message {
+//   id        Int        @id @default(autoincrement())
+//   content  String
+//   date     DateTime
+//   sender_id Int
+
+//   discussion_id Int? // Champ optionnel
+//   channel_id Int? // Champ optionnel
+// // Ajouter la relation many-to-many avec Discussion
+//   discussions   Discussion[] @relation("DiscussionToMessage", references: [channel])
+// }
+// model Discussion_message {
+//   id            Int        @id @default(autoincrement())
+//   discussion_id Int
+//   message_id    Int 
+//   channel_id    Int
+//   message       Message    @relation(fields: [message_id], references: [id])
+//   discussion    Discussion @relation(fields: [discussion_id], references: [id])
+//   // channel       Channel    @relation(fields: [channel_id], references: [id])
+
+// }
+
+
+
+
+model Mutes {
+  id Int @id @default(autoincrement())
+  channel_id Int
+  user_id Int
+  unmutetime DateTime
+  user_1    Discussion[] @relation(name: "user_1") // relation user_id_1 a sender_id(game_invitation)
+
+}
+generator client {
+  provider = "prisma-client-js"
+}
