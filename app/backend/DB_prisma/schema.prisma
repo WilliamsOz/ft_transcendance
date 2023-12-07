@@ -21,8 +21,12 @@ model User {
   user_2 Game[] @relation("user_id_2")
   
   game_invitations Game_invitation[] @relation("game_invitation_id")
-
-
+  messages_user MessageUser[]
+  user_bann Bann[] @relation("user_id")
+  user_admin Admin[] @relation("user_id")
+  user_member Members[] @relation("user_id")
+  user_channel UserChannel[]
+  // messages       MessageUser[] @relation("users")
 }
 
 model Blocked {
@@ -65,22 +69,11 @@ model Game_invitation {
   game_invitation_id User @relation(name: "game_invitation_id", fields: [discussion_id], references: [id]) // relation game_invitation_id a (User)
 }
 
-// model Discussion {
-//   id        Int               @id @default(autoincrement())
-//   user_id_1 Int               @unique
-//   user_id_2 Int
-//   date      DateTime
-//   user_1    Game_invitation[] @relation(name: "user_id_1") // relation user_id_1 a sender_id(game_invitation)
-//   user_mute Mutes[] @relation(name: "user_1") // relation user_id_1 a sender_id(game_invitation)
-//  // Ajouter la relation many-to-many avec Message
-//   messages  Message[]         @relation("DiscussionToMessage", references: [discussion_id])
-// }
 // Relation Many to many entre Discussion et Message 
 // 1 -- discussion peut avoir plusieurs messages donc many to many 
 // Il faut creer une table de jonction dites Intermediaire entre Discussion et Message
 // Cette table de jonction va contenir les id de Discussion et de Message
 // 2 -- Ajouter les relations dans les tables Discussion et Message a la table de jonction
-
 model Message {
   id            Int        @id @default(autoincrement())
   content       String
@@ -91,9 +84,9 @@ model Message {
   channel_id    Int?          // Champ optionnel
   message_id    Int?          // Champ optionnel
   messages      DiscussionMessage[]
-
+  messages_user MessageUser[]
+  channel       Channel?   @relation("channel_message", fields: [channel_id], references: [id])
 }
-
 model Discussion {
   id            Int               @id @default(autoincrement())
   user_id_1     Int               @unique
@@ -104,7 +97,7 @@ model Discussion {
   messages      DiscussionMessage[]
 }
 
-model DiscussionMessage {
+model DiscussionMessage { // Relation Many to many entre Discussion et Message
   discussion_id Int
   channel_id    Int
   message_id    Int
@@ -112,33 +105,17 @@ model DiscussionMessage {
   message       Message    @relation(fields: [message_id], references: [id])
   discussion    Discussion @relation(fields: [discussion_id], references: [id])
   // channel       Message    @relation(fields: [channel_id], references: [id]) // Remet lors de la creation table channel
-
-  @@id([discussion_id, channel_id, message_id], name: "composite_id")
+  @@id([discussion_id, channel_id, message_id], name: "discussion_mess_relation") // ca permet une relation unique de many to many 
 }
 
-// model Message {
-//   id        Int        @id @default(autoincrement())
-//   content  String
-//   date     DateTime
-//   sender_id Int
+model MessageUser { // Relation Many to many entre Message et User
+  message_id    Int
+  user_id       Int
+  message       Message    @relation(fields: [message_id], references: [id])
+  user          User       @relation(fields: [user_id], references: [id])
+  @@id([user_id, message_id], name: "user_message_relation")
 
-//   discussion_id Int? // Champ optionnel
-//   channel_id Int? // Champ optionnel
-// // Ajouter la relation many-to-many avec Discussion
-//   discussions   Discussion[] @relation("DiscussionToMessage", references: [channel])
-// }
-// model Discussion_message {
-//   id            Int        @id @default(autoincrement())
-//   discussion_id Int
-//   message_id    Int 
-//   channel_id    Int
-//   message       Message    @relation(fields: [message_id], references: [id])
-//   discussion    Discussion @relation(fields: [discussion_id], references: [id])
-//   // channel       Channel    @relation(fields: [channel_id], references: [id])
-
-// }
-
-
+}
 
 
 model Mutes {
@@ -147,8 +124,55 @@ model Mutes {
   user_id Int
   unmutetime DateTime
   user_1    Discussion[] @relation(name: "user_1") // relation user_id_1 a sender_id(game_invitation)
+  channel     Channel   @relation("channel_mute", fields: [channel_id], references: [id])
+}
+
+model Bann {
+  id Int @id @default(autoincrement())
+  channel_id Int
+  user_id Int
+  unban_time DateTime
+  user_1 User @relation("user_id", fields: [user_id], references: [id]) // Je declare une relation entre user_id et id de User
+  channel     Channel   @relation("channel_banned", fields: [channel_id], references: [id])
+}
+model Admin {
+  id Int @id @default(autoincrement())
+  user_id Int
+  channel_id Int
+  user_1 User @relation("user_id", fields: [user_id], references: [id]) // Je declare une relation entre user_id et id de User
+  channel     Channel   @relation("channel_admin", fields: [channel_id], references: [id])
+}
+model Members {
+  id Int @id @default(autoincrement())
+  user_id Int
+  channel_id Int
+  user_1 User @relation("user_id", fields: [user_id], references: [id]) // Je declare une relation entre user_id et id de User
+  channel     Channel   @relation("channel_members", fields: [channel_id], references: [id])
+}
+model UserChannel { // Relation Many to many entre User et Channel
+  user_channel_id Int
+  user_id Int
+  channel_id Int
+  user User @relation(fields: [user_id], references: [id])
+  channel Channel @relation(fields: [channel_id], references: [id])
+
+  
+  @@id([user_id, channel_id], name: "user_channel_relation")
 
 }
+model Channel {
+  id Int @id @default(autoincrement())
+  mode String
+  password String? // Champ optionnel
+  owner_id Int
+  members     Members[] @relation("channel_members")
+  admin      Admin[] @relation("channel_admin")
+  banned     Bann[] @relation("channel_banned")
+  message     Message[] @relation("channel_message")
+  mute    Mutes[] @relation("channel_mute")
+  user_channel UserChannel[] // Table de jonction entre User et Channel
+}
+
 generator client {
   provider = "prisma-client-js"
 }
