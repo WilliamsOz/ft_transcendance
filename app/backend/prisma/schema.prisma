@@ -2,7 +2,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://yonix:Soufiene123@localhost:5432/yonix"
 }
 
 model User {
@@ -26,7 +26,6 @@ model User {
   user_admin Admin[] @relation("user_id")
   user_member Members[] @relation("user_id")
   user_channel UserChannel[]
-  // messages       MessageUser[] @relation("users")
 }
 
 model Blocked {
@@ -48,6 +47,7 @@ model Friends {
 }
 
 model Game {
+  
   id    Int    @id @default(autoincrement())
   user_id_1 Int
   user_id_2 Int
