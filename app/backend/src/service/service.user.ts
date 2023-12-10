@@ -2,13 +2,34 @@ import { Injectable } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
 
 @Injectable()
-export class UserService {
+export class UserService 
+{
+  constructor(private readonly prisma: PrismaClient) {}
+  
   static findAllUserFriends(userId: number) {
       throw new Error('Method not implemented.');
   }
-  constructor(private readonly prisma: PrismaClient) {}
-
   // Cette fonction est une méthode asynchrone appelée 'findOne'
+  async create(data: any): Promise<User | null > { // Creer un utilisateur
+    return await this.prisma.user.create({
+      data,
+    });
+  }
+
+  async update(id: number, data: any): Promise<User | null> { // Mettre à jour un utilisateur
+    return await this.prisma.user.update({
+      where: { id },
+      data,
+    });
+  }
+
+  async delete(id: number): Promise<User | null> { // Supprimer un utilisateur
+    return await this.prisma.user.delete({
+      where: { id },
+    });
+  }
+
+  
   async findOne(login42: string): Promise<User | null> { // Recuperer un utilisateur par son login42
     // Elle utilise 'prisma' (un ORM pour gérer la base de données) pour chercher un utilisateur unique
     return await this.prisma.user.findUnique({
@@ -28,24 +49,6 @@ export class UserService {
     });
   }
 
-  async create(data: any): Promise<User | null > { // Creer un utilisateur
-    return await this.prisma.user.create({
-      data,
-    });
-  }
-
-  async update(id: number, data: any): Promise<User | null> { // Mettre à jour un utilisateur
-    return await this.prisma.user.update({
-      where: { id },
-      data,
-    });
-  }
-
-  async delete(id: number): Promise<User | null> { // Supprimer un utilisateur
-    return await this.prisma.user.delete({
-      where: { id },
-    });
-  }
 
   async FindUserWithGames(userId: number) { // Recuperer les jeux de l'utilisateur
     return await this.prisma.user.findUnique({
