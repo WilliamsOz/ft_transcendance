@@ -52,14 +52,27 @@ export class UserService
 
   async FindUserWithGames(userId: number) { // Recuperer les jeux de l'utilisateur
     return await this.prisma.user.findUnique({
-      where: { id: userId },
-      include: {
-        user_1: true,
+      where: { id: userId }, // Recherchez l'utilisateur par son 'id'
+      include: { // Inclure les relations 'user_1' et 'user_2' de la table 'game'
+        user_1: true, // Je recupere la table liee a user_1 et user_2 grace a include
         user_2: true,
       },
     });
   }
 
+  async isUserInGame(userId: number) 
+  {
+    const userWithGames = await this.FindUserWithGames(userId);
+    
+    // Vérifiez si l'utilisateur est en jeu en vérifiant les relations user_1 et user_2
+    if (userWithGames.user_1.length > 0 || userWithGames.user_2.length > 0) {
+      return true; // L'utilisateur est en jeu
+    } 
+    else 
+    {
+      return false; // L'utilisateur n'est pas en jeu
+    }
+  }
 
   async findAllUserFriends(userId: number) // Recuperer les amis de l'utilisateur
   {
