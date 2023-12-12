@@ -1,4 +1,4 @@
-NAME = ircserv
+NAME = ft_transcendance
 
 SRCS_PATH =	$(shell find src -type d)
 

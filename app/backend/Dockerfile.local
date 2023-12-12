@@ -1,10 +1,12 @@
 FROM node:lts
 
-RUN mkdir -p /svr/app
+RUN mkdir -p /app
 
-WORKDIR /svr/app
+WORKDIR /app
 
-RUN npm i -g @nestjs/cli --silent
+COPY . .
+
+RUN npm install postgresql @nestjs/cli prisma jest bcrypt
 
 COPY package.json .
 
@@ -12,7 +14,7 @@ COPY package-lock.json .
 
 RUN npm install --silent
 
-COPY . .
+
 
 # Value set in .env file.
 EXPOSE $BACKEND_PORT

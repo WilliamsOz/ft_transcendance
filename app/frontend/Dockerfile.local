@@ -1,6 +1,8 @@
-FROM node:14-slim
+FROM node:lts
 
-WORKDIR /usr/src/app
+WORKDIR /app
+
+RUN npm install react
 
 COPY . .
 
