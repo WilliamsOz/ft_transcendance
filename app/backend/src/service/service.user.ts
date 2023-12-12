@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient, User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 export class UserService 
@@ -10,7 +12,15 @@ export class UserService
       throw new Error('Method not implemented.');
   }
   // Cette fonction est une méthode asynchrone appelée 'findOne'
-  async create(data: any): Promise<User | null > { // Creer un utilisateur
+  async create(data: any): Promise<User | null > {
+    // Hacher le mot de passe
+    const saltRounds = 10; // Vous pouvez ajuster ce nombre en fonction de vos besoins
+    const hashedPassword = await bcrypt.hash(data.password, saltRounds);
+  
+    // Remplacer le mot de passe clair par le mot de passe haché
+    data.password = hashedPassword;
+  
+    // Créer l'utilisateur avec le mot de passe haché
     return await this.prisma.user.create({
       data,
     });
