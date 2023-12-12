@@ -12,7 +12,8 @@ model User {
   image_url String
   name String
   status String
-
+  password  String @unique
+  
   Blocked_user Blocked[] @relation("Blocked_user_id")
   Blocker_user Blocked[] @relation("Blocker_user_id")
   user_friend_1 Friends[] @relation("user_id_1")
