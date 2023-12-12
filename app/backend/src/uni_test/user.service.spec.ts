@@ -22,6 +22,7 @@ describe('UserService', () => {
         image_url: 'http://example.com/image.jpg',
         name: 'Test User',
         status: 'online',
+        password: 'testPassword',
       };
       jest.spyOn(prismaClient.user, 'findUnique').mockResolvedValue(expectedUser);
   
@@ -38,6 +39,7 @@ describe('UserService', () => {
         image_url: 'http://example.com/image.jpg',
         name: 'Test User',
         status: 'online',
+        password: 'testPassword',
       };
       
       const expectedUser = {
@@ -93,6 +95,7 @@ describe('UserService', () => {
         image_url: 'http://example.com/image.jpg',
         name: 'Test User',
         status: 'online',
+        password: 'testPassword',
         user_1:  [{ id: 1, type: 'Ranked', user_id_1: 1, user_id_2: 2, winner_id: 1 /* autres détails du jeu */ }],
         user_2:  [{ id: 2, type: 'Ranked', user_id_1: 1, user_id_2: 2, winner_id: 1 /* autres détails du jeu */ }],
       };

@@ -63,7 +63,6 @@ export class UserService
   async isUserInGame(userId: number) 
   {
     const userWithGames = await this.FindUserWithGames(userId);
-    
     // Vérifiez si l'utilisateur est en jeu en vérifiant les relations user_1 et user_2
     if (userWithGames.user_1.length > 0 || userWithGames.user_2.length > 0) {
       return true; // L'utilisateur est en jeu
