@@ -7,15 +7,14 @@ async function main() {
   const userService = new UserService(prisma);
 
   try {
-    const newUser = 
-    {
-      id : 1,
-      login42: 'test',
-      name : 'test',
-      status : 'en ligne',
-      image_url : 'https://cdn.intra.42.fr/users/test.jpg',
-      email: 'test@example.com',
-      password: 'password123',
+    const newUser = {
+      id: 2,
+      login42: 'momo',
+      name: 'babar',
+      status: 'en ligne',
+      image_url: 'https://cdn.intra.42.fr/users/babar.jpg',
+      email: 'babar@example.com',
+      password: 'lol321312',
     };
 
     const createdUser = await userService.create(newUser);
