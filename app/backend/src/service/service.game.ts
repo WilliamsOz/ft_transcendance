@@ -6,10 +6,9 @@ export class GameService {
   // Service pour les jeux
   constructor(private readonly prisma: PrismaClient) {}
 
-  async create(data: any): Promise<Game | null> {
-    // Creer un utilisateur
+  async create(id: number, data:any): Promise<Game | null> {
     const user = await this.prisma.user.findUnique({
-      where: { id: data.user_id_1 },
+      where: { id},
     });
     if (!user) {
       throw new NotFoundException('User id not found'); // ou throw new NotFoundException('User not found');
@@ -20,24 +19,32 @@ export class GameService {
   }
 
   async delete(id: number): Promise<Game | null> {
-    // Supprimer un utilisateur
-    const user = await this.prisma.game.findUnique({
+    // Vérifiez si le jeu existe
+    const game = await this.prisma.game.findUnique({
       where: { id },
     });
-    if (!user) {
-      throw new NotFoundException('Game id not found'); // ou throw new NotFoundException('User not found');
+  
+    if (!game) {
+      // Le jeu n'existe pas, vous pouvez lever une exception ou renvoyer null
+      throw new NotFoundException('Game id not found');
     }
-    return await this.prisma.game.delete({
+    // Supprimez le jeu s'il existe et que l'utilisateur a les autorisations nécessaires
+    const deletedGame = await this.prisma.game.delete({
       where: { id },
     });
+  
+    return deletedGame;
   }
+  
 
   async update(id: number, data: any): Promise<Game | null> {
-    const user = await this.prisma.game.findUnique({
+    const game = await this.prisma.game.findUnique({
       where: { id },
     });
-    if (!user) {
-      throw new NotFoundException('Game id not found'); // ou throw new NotFoundException('User not found');
+  
+    if (!game) {
+      // Le jeu n'existe pas, vous pouvez lever une exception ou renvoyer null
+      throw new NotFoundException('Game id not found');
     }
     return await this.prisma.game.update({
       where: { id },
