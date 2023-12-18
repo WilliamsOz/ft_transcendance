@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaClient, User } from '@prisma/client';
+import { Prisma, PrismaClient, User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -8,17 +8,39 @@ export class UserService {
 
   // Cette fonction est une méthode asynchrone appelée 'findOne'
   async create(data: any): Promise<User | null> {
-    // Hacher le mot de passe
-    const saltRounds = 10; // Vous pouvez ajuster ce nombre en fonction de vos besoins
-    const hashedPassword = await bcrypt.hash(data.password, saltRounds);
+    try {
+      // Validez les données d'entrée (par exemple, assurez-vous que les champs obligatoires sont présents)
 
-    // Remplacer le mot de passe clair par le mot de passe haché
-    data.password = hashedPassword;
+      // Hacher le mot de passe
+      const saltRounds = 10; // Vous pouvez ajuster ce nombre en fonction de vos besoins
+      const hashedPassword = await bcrypt.hash(data.password, saltRounds);
 
-    // Créer l'utilisateur avec le mot de passe haché
-    return await this.prisma.user.create({
-      data,
-    });
+      // Remplacer le mot de passe clair par le mot de passe haché
+      data.password = hashedPassword;
+
+      // Créer l'utilisateur avec le mot de passe haché
+      const createdUser = await this.prisma.user.create({
+        data,
+      });
+
+      // Vérifiez si l'utilisateur a été créé avec succès
+      if (!createdUser) {
+        throw new Error('Failed to create user'); // Vous pouvez personnaliser le message d'erreur
+      }
+
+      return createdUser;
+    } 
+    catch (error) {
+      // Gérez les erreurs spécifiques et lancez des exceptions appropriées
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        // Si l'erreur est liée à Prisma (par exemple, violation de contrainte unique)
+        if (error.code === 'P2002') {
+          throw new NotFoundException('User already exists');
+        }
+      }
+
+      throw new Error('Failed to create user'); // Gérez les autres erreurs ici
+    }
   }
 
   async update(id: number, data: any): Promise<User> {
