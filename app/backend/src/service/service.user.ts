@@ -33,7 +33,6 @@ export class UserService {
     catch (error) {
       // Gérez les erreurs spécifiques et lancez des exceptions appropriées
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        // Si l'erreur est liée à Prisma (par exemple, violation de contrainte unique)
         if (error.code === 'P2002') {
           throw new NotFoundException('User already exists');
         }
