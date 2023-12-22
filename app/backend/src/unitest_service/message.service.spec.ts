@@ -32,12 +32,14 @@ describe('MessageService', () => {
       password: 'test',
       // autres propriétés d'utilisateur nécessaires pour les tests
     };
-  
+
     jest.spyOn(prismaClient.user, 'findUnique').mockResolvedValue(user);
-    jest.spyOn(prismaClient.message, 'create').mockResolvedValue({ ...messageData, sender_id: user.id });
-  
+    jest
+      .spyOn(prismaClient.message, 'create')
+      .mockResolvedValue({ ...messageData, sender_id: user.id });
+
     const messageCreated = await messageService.create(messageData);
-  
+
     expect(messageCreated).toEqual(messageData);
     expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
       where: { id: userId },
@@ -51,8 +53,6 @@ describe('MessageService', () => {
       },
     });
   });
-  
-  
 
   it('should throw a BadRequestException when creating a message with content length > 1000', async () => {
     const userId = 1;
@@ -71,15 +71,13 @@ describe('MessageService', () => {
       status: 'online',
       password: 'test',
     };
-  
+
     jest.spyOn(prismaClient.user, 'findUnique').mockResolvedValue(messageData);
-  
+
     await expect(messageService.create(messageData)).rejects.toThrowError(
-      BadRequestException
+      BadRequestException,
     );
   });
-  
-  
 
   it('should throw a BadRequestException when creating a message with content length > 1000', async () => {
     const userId = 1;
@@ -102,7 +100,7 @@ describe('MessageService', () => {
     jest.spyOn(prismaClient.user, 'findUnique').mockResolvedValue(user);
 
     await expect(messageService.create(messageData)).rejects.toThrowError(
-      BadRequestException
+      BadRequestException,
     );
   });
 
@@ -110,16 +108,18 @@ describe('MessageService', () => {
     const messageId = 1;
     const messageData = {
       id: messageId,
-      content : 'test',
-      date : new Date(),
-      sender_id : 1,
-      discussion_id : 1,
-      channel_id : 1,
-      message_id : 1,
+      content: 'test',
+      date: new Date(),
+      sender_id: 1,
+      discussion_id: 1,
+      channel_id: 1,
+      message_id: 1,
       // autres propriétés du message nécessaires pour les tests
     };
 
-    jest.spyOn(prismaClient.message, 'findUnique').mockResolvedValue(messageData);
+    jest
+      .spyOn(prismaClient.message, 'findUnique')
+      .mockResolvedValue(messageData);
     jest.spyOn(prismaClient.message, 'delete').mockResolvedValue(messageData);
 
     const messageDeleted = await messageService.delete(messageId);
@@ -138,37 +138,43 @@ describe('MessageService', () => {
 
     jest.spyOn(prismaClient.message, 'findUnique').mockResolvedValue(null);
 
-    await expect(messageService.delete(nonExistingMessageId)).rejects.toThrowError(
-      NotFoundException
-    );
+    await expect(
+      messageService.delete(nonExistingMessageId),
+    ).rejects.toThrowError(NotFoundException);
   });
 
   it('should update a message', async () => {
     const number = 1;
     const updatedMessageData = {
-      id : number,
-      content : 'test',
-      date : new Date(),
-      sender_id : 1,
-      discussion_id : 1,
-      channel_id : 1,
-      message_id : 1,
+      id: number,
+      content: 'test',
+      date: new Date(),
+      sender_id: 1,
+      discussion_id: 1,
+      channel_id: 1,
+      message_id: 1,
     };
     const messageData = {
-    id: number,
-    content : 'test',
-    date : new Date(),
-    sender_id : 1,
-    discussion_id : 1,
-    channel_id : 1,
-    message_id : 1,
-      
+      id: number,
+      content: 'test',
+      date: new Date(),
+      sender_id: 1,
+      discussion_id: 1,
+      channel_id: 1,
+      message_id: 1,
     };
 
-    jest.spyOn(prismaClient.message, 'findUnique').mockResolvedValue(messageData);
-    jest.spyOn(prismaClient.message, 'update').mockResolvedValue(updatedMessageData);
+    jest
+      .spyOn(prismaClient.message, 'findUnique')
+      .mockResolvedValue(messageData);
+    jest
+      .spyOn(prismaClient.message, 'update')
+      .mockResolvedValue(updatedMessageData);
 
-    const updatedMessage = await messageService.update(number, updatedMessageData);
+    const updatedMessage = await messageService.update(
+      number,
+      updatedMessageData,
+    );
 
     expect(updatedMessage).toEqual(updatedMessageData);
     expect(prismaClient.message.findUnique).toHaveBeenCalledWith({
@@ -188,24 +194,26 @@ describe('MessageService', () => {
 
     jest.spyOn(prismaClient.message, 'findUnique').mockResolvedValue(null);
 
-    await expect(messageService.update(nonExistingMessageId, updatedMessageData)).rejects.toThrowError(
-      NotFoundException
-    );
+    await expect(
+      messageService.update(nonExistingMessageId, updatedMessageData),
+    ).rejects.toThrowError(NotFoundException);
   });
 
   it('should find a message by ID', async () => {
     const number = 1;
     const messageData = {
       id: number,
-      content : 'test',
-      date : new Date(),
-      sender_id : 1,
-      discussion_id : 1,
-      channel_id : 1,
-      message_id : 1,
+      content: 'test',
+      date: new Date(),
+      sender_id: 1,
+      discussion_id: 1,
+      channel_id: 1,
+      message_id: 1,
     };
 
-    jest.spyOn(prismaClient.message, 'findUnique').mockResolvedValue(messageData);
+    jest
+      .spyOn(prismaClient.message, 'findUnique')
+      .mockResolvedValue(messageData);
 
     const foundMessage = await messageService.findById(number);
 
@@ -220,8 +228,8 @@ describe('MessageService', () => {
 
     jest.spyOn(prismaClient.message, 'findUnique').mockResolvedValue(null);
 
-    await expect(messageService.findById(nonExistingMessageId)).rejects.toThrowError(
-      NotFoundException
-    );
+    await expect(
+      messageService.findById(nonExistingMessageId),
+    ).rejects.toThrowError(NotFoundException);
   });
 });

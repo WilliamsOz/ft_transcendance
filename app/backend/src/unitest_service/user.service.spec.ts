@@ -19,7 +19,7 @@ describe('UserService', () => {
     jest.clearAllMocks();
   });
 
-  describe('create', () => {
+  describe('create an user', () => {
     it('should create a user', async () => {
       const userData = {
         id: 1,
@@ -42,30 +42,9 @@ describe('UserService', () => {
       expect(user).toEqual(expectedUser);
       expect(prismaClient.user.create).toHaveBeenCalledWith({ data: userData });
     });
-
-    it('should handle errors during user creation', async () => {
-      const userData = {
-        id: 1,
-        login42: 'testLogin42',
-        email: 'test@hotmail.ft',
-        image_url: 'http://example.com/image.jpg',
-        name: 'Test User',
-        status: 'online',
-        password: 'testPassword',
-      };
-
-      const errorMessage = 'Database error';
-
-      jest
-        .spyOn(prismaClient.user, 'create')
-        .mockRejectedValue(new Error(errorMessage));
-
-      await expect(userService.create(userData)).rejects.toThrow(errorMessage);
-      expect(prismaClient.user.create).toHaveBeenCalledWith({ data: userData });
-    });
   });
 
-  describe('findOne', () => {
+  describe('Test finding user by his login42', () => {
     it('should find a user by login42', async () => {
       const login42 = 'testLogin42';
       const expectedUser = {
@@ -77,7 +56,9 @@ describe('UserService', () => {
         status: 'online',
         password: 'testPassword',
       };
-      jest.spyOn(prismaClient.user, 'findUnique').mockResolvedValue(expectedUser);
+      jest
+        .spyOn(prismaClient.user, 'findUnique')
+        .mockResolvedValue(expectedUser);
 
       const user = await userService.findOne(login42);
 
@@ -87,30 +68,64 @@ describe('UserService', () => {
       });
     });
 
-    it('should return null if the user does not exist', async () => {
-      const login42 = 'nonExistingUser';
-    
-      jest.spyOn(prismaClient.user, 'findUnique').mockRejectedValue(new NotFoundException('User not found with login42'));
-    
-      await expect(userService.findOne(login42)).rejects.toThrowError(NotFoundException);
-      expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
-        where: { login42 },
+    describe('Test error user does not exist in db', () => {
+      it('should handle errors during user creation', async () => {
+        const userData = {
+          id: 1,
+          login42: 'testLogin42',
+          email: 'test@hotmail.ft',
+          image_url: 'http://example.com/image.jpg',
+          name: 'Test User',
+          status: 'online',
+          password: 'testPassword',
+        };
+
+        const errorMessage = 'Failed to create user';
+
+        jest
+          .spyOn(prismaClient.user, 'create')
+          .mockRejectedValue(new Error(errorMessage));
+
+        await expect(userService.create(userData)).rejects.toThrow(
+          errorMessage,
+        );
+        expect(prismaClient.user.create).toHaveBeenCalledWith({
+          data: userData,
+        });
       });
-    });
 
-    it('should handle errors during user lookup', async () => {
-      const login42 = 'testLogin42';
-      const errorMessage = 'Database error';
+      it('should return null if the user does not exist', async () => {
+        const login42 = 'nonExistingUser';
 
-      jest
-        .spyOn(prismaClient.user, 'findUnique')
-        .mockRejectedValue(new Error(errorMessage));
+        jest
+          .spyOn(prismaClient.user, 'findUnique')
+          .mockRejectedValue(
+            new NotFoundException('User not found with login42'),
+          );
 
-      await expect(userService.findOne(login42)).rejects.toThrow(errorMessage);
-      expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
-        where: { login42 },
+        await expect(userService.findOne(login42)).rejects.toThrowError(
+          NotFoundException,
+        );
+        expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
+          where: { login42 },
+        });
+      });
+
+      it('should handle errors during user lookup', async () => {
+        const login42 = 'testLogin42';
+        const errorMessage = 'Database error';
+
+        jest
+          .spyOn(prismaClient.user, 'findUnique')
+          .mockRejectedValue(new Error(errorMessage));
+
+        await expect(userService.findOne(login42)).rejects.toThrow(
+          errorMessage,
+        );
+        expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
+          where: { login42 },
+        });
       });
     });
   });
-
 });

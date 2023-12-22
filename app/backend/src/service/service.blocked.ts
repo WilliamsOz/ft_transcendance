@@ -5,8 +5,7 @@ import { Blocked, PrismaClient } from '@prisma/client';
 export class BlockedService {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async findById(id: number): Promise<Blocked | null> 
-  {
+  async findById(id: number): Promise<Blocked | null> {
     const user = await this.prisma.blocked.findUnique({
       where: { id },
     });
@@ -18,8 +17,7 @@ export class BlockedService {
     });
   }
 
-  async find_Blocked_user(id: number): Promise<Blocked | null> 
-  {
+  async find_Blocked_user(id: number): Promise<Blocked | null> {
     const user = await this.prisma.blocked.findUnique({
       where: { id },
     });
@@ -32,8 +30,7 @@ export class BlockedService {
     });
   }
 
-  async find_Blocker_user(id: number): Promise<Blocked | null> 
-  {
+  async find_Blocker_user(id: number): Promise<Blocked | null> {
     const user = await this.prisma.blocked.findUnique({
       where: { id },
     });
@@ -45,8 +42,7 @@ export class BlockedService {
     });
   }
 
-  async create(data: any): Promise<Blocked | null> 
-  {
+  async create(data: any): Promise<Blocked | null> {
     const user = await this.prisma.blocked.findUnique({
       where: { id: data.blocker_id },
     });

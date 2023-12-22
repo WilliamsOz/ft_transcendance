@@ -29,8 +29,7 @@ export class UserService {
       }
 
       return createdUser;
-    } 
-    catch (error) {
+    } catch (error) {
       // Gérez les erreurs spécifiques et lancez des exceptions appropriées
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
