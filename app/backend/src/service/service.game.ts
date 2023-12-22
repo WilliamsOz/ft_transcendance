@@ -6,9 +6,9 @@ export class GameService {
   // Service pour les jeux
   constructor(private readonly prisma: PrismaClient) {}
 
-  async create(id: number, data:any): Promise<Game | null> {
+  async create(id: number, data: any): Promise<Game | null> {
     const user = await this.prisma.user.findUnique({
-      where: { id},
+      where: { id },
     });
     if (!user) {
       throw new NotFoundException('User id not found'); // ou throw new NotFoundException('User not found');
@@ -23,7 +23,7 @@ export class GameService {
     const game = await this.prisma.game.findUnique({
       where: { id },
     });
-  
+
     if (!game) {
       // Le jeu n'existe pas, vous pouvez lever une exception ou renvoyer null
       throw new NotFoundException('Game id not found');
@@ -32,16 +32,15 @@ export class GameService {
     const deletedGame = await this.prisma.game.delete({
       where: { id },
     });
-  
+
     return deletedGame;
   }
-  
 
   async update(id: number, data: any): Promise<Game | null> {
     const game = await this.prisma.game.findUnique({
       where: { id },
     });
-  
+
     if (!game) {
       // Le jeu n'existe pas, vous pouvez lever une exception ou renvoyer null
       throw new NotFoundException('Game id not found');

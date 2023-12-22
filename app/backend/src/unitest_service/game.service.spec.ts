@@ -12,9 +12,7 @@ describe('GameService', () => {
 
   it('should throw NotFoundException when create is called with non-existing user id', async () => {
     const userId = 999; // Utilisez un ID qui n'existe pas dans la base de données de test
-    const gameData = {
-
-    };
+    const gameData = {};
 
     prismaClient.user.findUnique = jest.fn().mockResolvedValue(null);
 
@@ -23,7 +21,7 @@ describe('GameService', () => {
     };
 
     await expect(createGame).rejects.toThrow('User id not found');
-    
+
     // Vérifiez que la méthode findUnique a été appelée avec les bons paramètres
     expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
       where: { id: userId },
@@ -43,7 +41,7 @@ describe('GameService', () => {
 
     // Assurez-vous que deleteGame lève une NotFoundException
     await expect(deleteGame).rejects.toThrow('Game id not found');
-    
+
     // Vérifiez que la méthode findUnique a été appelée avec les bons paramètres
     expect(prismaClient.game.findUnique).toHaveBeenCalledWith({
       where: { id: gameId },
@@ -70,7 +68,7 @@ describe('GameService', () => {
 
     // Assurez-vous que updateGame lève une NotFoundException
     await expect(updateGame).rejects.toThrow('Game id not found');
-    
+
     // Vérifiez que la méthode findUnique a été appelée avec les bons paramètres
     expect(prismaClient.game.findUnique).toHaveBeenCalledWith({
       where: { id: gameId },
@@ -87,7 +85,7 @@ describe('GameService', () => {
     };
 
     await expect(findGameById).rejects.toThrow('Game id not found');
-    
+
     expect(prismaClient.game.findUnique).toHaveBeenCalledWith({
       where: { id: gameId },
     });
@@ -103,7 +101,7 @@ describe('GameService', () => {
     };
 
     await expect(findGamesByUser).rejects.toThrow('User not found');
-    
+
     expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
       where: { id: userId },
     });
@@ -127,7 +125,7 @@ describe('GameService', () => {
     const gameCreated = await gameService.create(gameId, gameData);
 
     expect(gameCreated).toEqual(gameData);
-    
+
     // Vérifiez que la méthode findUnique a été appelée avec les bons paramètres
     expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
       where: { id: gameId },
@@ -138,7 +136,6 @@ describe('GameService', () => {
       data: gameData,
     });
   });
-
 
   it('should find games by user id', async () => {
     const userId = 1;
@@ -160,7 +157,7 @@ describe('GameService', () => {
     const gamesFound = await gameService.findGamesByUserId(userId);
 
     expect(gamesFound).toEqual([game]);
-    
+
     // Vérifiez que la méthode findUnique a été appelée avec les bons paramètres
     expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
       where: { id: userId },
