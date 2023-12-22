@@ -18,9 +18,9 @@ describe('MessageService', () => {
       content: 'Test message content',
       date: new Date(),
       sender_id: userId,
-      discussion_id: undefined, // Champ optionnel, peut être nul
-      channel_id: undefined, // Champ optionnel, peut être nul
-      message_id: undefined, // Champ optionnel, peut être nul
+      discussion_id: null, // Champ optionnel, peut être nul
+      channel_id: null, // Champ optionnel, peut être nul
+      message_id: null, // Champ optionnel, peut être nul
     };
     const user = {
       id: 1,
@@ -34,9 +34,13 @@ describe('MessageService', () => {
     };
 
     jest.spyOn(prismaClient.user, 'findUnique').mockResolvedValue(user);
-    jest
-      .spyOn(prismaClient.message, 'create')
-      .mockResolvedValue({ ...messageData, sender_id: user.id });
+    jest.spyOn(prismaClient.message, 'create').mockResolvedValue({
+      ...messageData,
+      sender_id: user.id,
+      discussion_id: null,
+      channel_id: null,
+      message_id: null,
+    });
 
     const messageCreated = await messageService.create(messageData);
 
