@@ -2,7 +2,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://yonix:Soufiene123@localhost:5432/yonix"
+  url      = "Replace with the good url there"
 }
 
 model User {
