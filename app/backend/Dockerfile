@@ -6,15 +6,13 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install postgresql @nestjs/cli prisma jest bcrypt
+RUN npm install postgresql @nestjs/cli prisma jest bcrypt class-validator
 
 COPY package.json .
 
 COPY package-lock.json .
 
 RUN npm install --silent
-
-
 
 # Value set in .env file.
 EXPOSE $BACKEND_PORT
