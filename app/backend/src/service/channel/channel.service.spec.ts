@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common/exceptions/not-found.exception';
-import { UserChannelService } from '../channel/channel.service';
+import { UserChannelService } from './channel.service';
 import { PrismaClient } from '@prisma/client';
 
 describe('UserChannelService', () => {

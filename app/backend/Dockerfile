@@ -12,7 +12,7 @@ COPY package.json .
 
 COPY package-lock.json .
 
-RUN npm install --silent
+RUN npm install
 
 # Value set in .env file.
 EXPOSE $BACKEND_PORT
