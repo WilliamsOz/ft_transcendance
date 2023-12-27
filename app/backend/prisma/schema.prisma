@@ -2,7 +2,7 @@
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://admin@backend.com:pass@123@localhost:5055/bp-pg-db"
+  url      = "postgresql://postgres:root@bp-pg-db:5432/bp-pg-db"
 }
 
 model User {

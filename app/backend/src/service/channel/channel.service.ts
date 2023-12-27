@@ -6,6 +6,14 @@ import * as bcrypt from 'bcrypt';
 export class UserChannelService {
   constructor(private readonly prisma: PrismaClient) {}
   async create(data: any): Promise<UserChannel | null> {
+    if (typeof data.user_id !== 'number') {
+      throw new Error('user_id is missing or not a number');
+    }
+
+    // Vérifiez si channel_id est présent et est un nombre
+    if (typeof data.channel_id !== 'number') {
+      throw new Error('channel_id is missing or not a number');
+    }
     const user = await this.prisma.user.findUnique({
       where: { id: data.user_id },
     });
