@@ -8,8 +8,8 @@ COPY . .
 
 RUN  npm cache clean --force
 
-RUN npm install postgresql @nestjs/cli prisma jest bcrypt class-validator
-
+RUN npm install postgresql @nestjs/cli prisma jest
+RUN npm i --save class-validator class-transformer
 
 COPY package.json .
 
