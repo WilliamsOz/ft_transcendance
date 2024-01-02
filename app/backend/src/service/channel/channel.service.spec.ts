@@ -29,6 +29,7 @@ describe('UserChannelService', () => {
       mode: 'open',
       password: undefined,
       owner_id: 1,
+      name: 'channel',
     };
     const user = {
       id: 1,
@@ -54,6 +55,7 @@ describe('UserChannelService', () => {
       user_id: 1,
       channel_id: 2,
       password: 'password',
+      
     };
 
     const channel = {
@@ -61,6 +63,7 @@ describe('UserChannelService', () => {
       mode: 'open',
       password: undefined,
       owner_id: 1,
+      name: 'channel',
     };
     jest.spyOn(prismaClient.user, 'findUnique').mockResolvedValue(null); // Simuler un utilisateur non trouvé
     jest.spyOn(prismaClient.channel, 'findUnique').mockResolvedValue(channel);
@@ -109,6 +112,7 @@ describe('UserChannelService', () => {
       mode: 'open',
       password: undefined,
       owner_id: 1,
+      name: 'channel',
     };
     const userId = user.id;
     const channelId = channel.id;
@@ -161,6 +165,7 @@ describe('UserChannelService', () => {
       mode: 'open',
       password: undefined,
       owner_id: 1,
+      name: 'channel',
     };
     const userChannel = {
       user_id: user.id,

@@ -11,6 +11,6 @@ export class CreateChannelDto {
   @IsInt()
   readonly owner_id: number;
 
-  @IsInt()
-  readonly user_id: number; // Ajouter cette ligne
+  @IsString()
+  readonly name: string;
 }

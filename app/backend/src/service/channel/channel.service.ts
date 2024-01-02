@@ -5,12 +5,13 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserChannelService {
   constructor(private readonly prisma: PrismaClient) {}
-  async create(data: any): Promise<UserChannel | null> {
+  
+  
+  async create(data: any): Promise<Channel | null> {
     if (typeof data.user_id !== 'number') {
       throw new Error('user_id is missing or not a number');
     }
 
-    // Vérifiez si channel_id est présent et est un nombre
     if (typeof data.channel_id !== 'number') {
       throw new Error('channel_id is missing or not a number');
     }
@@ -21,15 +22,15 @@ export class UserChannelService {
       throw new NotFoundException('User id not found'); // ou throw new NotFoundException('User not found');
     }
     const channel = await this.prisma.channel.findUnique({
-      where: { id: data.channel_id },
+      where: { name: data.name },
     });
-    if (!channel) {
-      throw new NotFoundException('Channel id not found'); // ou throw new NotFoundException('User not found');
+    if (channel) {
+      throw new NotFoundException('Channel is already created'); // ou throw new NotFoundException('User not found');
     }
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(data.password, saltRounds);
     data.password = hashedPassword;
-    return await this.prisma.userChannel.create({
+    return await this.prisma.channel.create({
       data,
     });
   }

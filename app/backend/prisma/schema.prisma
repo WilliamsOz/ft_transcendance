@@ -2,7 +2,8 @@
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:root@bp-pg-db:5432/bp-pg-db"
+  url      = "postgresql://postgres:root@localhost:5432/bp-pg-db"
+
 }
 
 model User {
@@ -163,6 +164,7 @@ model Channel {
   mode String
   password String? // Champ optionnel
   owner_id Int
+  name String @unique
   members     Members[] @relation("channel_members")
   admin      Admin[] @relation("channel_admin")
   banned     Bann[] @relation("channel_banned")
