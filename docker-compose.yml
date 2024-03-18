@@ -1,8 +1,11 @@
 version: "3"
 
 services:
+
   app:
     container_name: python
+    env_file:
+      - .env
     build:
       context: .
     ports:
@@ -18,8 +21,11 @@ services:
       DB_PASS: ${DB_PASS}
     depends_on:
       - db
+
   db:
     container_name: postgres
+    env_file:
+      - .env
     image: postgres:13-alpine
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
