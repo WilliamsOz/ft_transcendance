@@ -1,5 +1,5 @@
 from django import forms
-from Game.models import PongGame, PongGameIA, PongTournament, PlayersTournament
+from Game.models import PongGame, PongGameIA, PongTournament, PlayersTournament , Morpion
 
 class PongGameForm(forms.ModelForm):
 	class Meta:
@@ -30,4 +30,16 @@ class PlayerTournamentForm(forms.ModelForm):
 		fields = ['name']
 		labels = {
 			'name': 'Nom du joueur'
+		}
+
+class MorpionForm(forms.ModelForm):
+	class Meta:
+		model = Morpion
+		fields = ['playerOne', 'playerTwo']
+		labels = {
+			'playerOne': 'Joueur 1',
+			'playerTwo': 'Joueur 2',
+		}
+		widgets = {
+			'playerOne': forms.TextInput(attrs={'readonly': 'readonly'}),
 		}

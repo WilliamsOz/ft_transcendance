@@ -2,4 +2,96 @@
 
 {% block content %}
 
+<div class="container text-center my-5">
+    <h1 class="welcome-title mb-4">Bienvenue sur ft_transcendance</h1>
+    <p class="lead">Découvrez notre jeu passionnant et rejoignez une communauté de joueurs dédiée.</p>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 text-white bg-dark shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Lancer une partie rapide de Ping pong</h5>
+                    <p class="card-text">Jouez immédiatement à une partie rapide et défiez vos amis ou d'autres joueurs en ligne.</p>
+                    <a href="{% url 'rapid_game_auth' user_id=user.user_id %}" class="btn btn-custom">Jouer</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 text-white bg-dark shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Organiser un tournoi de Ping Pong</h5>
+                    <p class="card-text">Créez et organisez vos propres tournois. Invitez vos amis et voyez qui est le meilleur !</p>
+                <a href="{% url 'create_tournament' user_id=user.user_id %}" class="btn btn-custom btn-lg btn-block">Organiser un tournoi</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 text-white bg-dark shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Historique des parties du Morpion</h5>
+                    <p class="card-text">Consultez votre historique de jeux, analysez vos performances et améliorez-vous.</p>
+                    <a href="{% url 'game_history' user_id=user.user_id %}" class="btn btn-custom">Voir l'historique</a>
+                </div>
+            </div>
+        </div>
+    </div>
+            </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+        color: #ecf0f1;
+    }
+
+    .welcome-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        background: linear-gradient(45deg, #8e44ad, #3498db);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .sub-title {
+        font-size: 2rem;
+        color: #8e44ad;
+    }
+
+    .btn-custom {
+        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 10px 20px;
+        color: #fff;
+        background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+        border: none;
+        border-radius: 30px;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        margin: 5px;
+    }
+
+    .btn-custom:hover {
+        background: linear-gradient(135deg, #3498db 0%, #8e44ad 100%);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .card {
+        background-color: #2c2c2c;
+        border: none;
+        border-radius: 10px;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        color: #ecf0f1;
+    }
+
+    .card-text {
+        color: #bdc3c7;
+    }
+</style>
+
 {% endblock %}

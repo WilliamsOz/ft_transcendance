@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from Game.models import PongGame, PongTournament, Match, PlayersTournament
+from Game.models import PongGame, PongTournament, Match, PlayersTournament , Morpion
 from User.models import User
-from Game.forms import PongGameForm, PongGameFormIA, PongTournamentForm, PlayerTournamentForm
+from Game.forms import PongGameForm, PongGameFormIA, PongTournamentForm, PlayerTournamentForm , MorpionForm
 from django.http import JsonResponse, HttpResponseRedirect
 import json, random
 from django.urls import reverse
@@ -197,3 +197,82 @@ def advance_tournament_round(tournament_id):
 		# Marquer le tournoi comme terminé s'il ne reste qu'un seul gagnant
 		tournament.finished = True
 		tournament.save()
+
+
+def morpion_form(request, user_id):
+	user = User.objects.get(user_id=user_id)
+	initial_data = {'playerOne': user.login42}
+	if request.method == 'POST':
+		form = MorpionForm(request.POST, initial=initial_data)
+		if form.is_valid():
+			playerTwo = form.cleaned_data['playerTwo']
+# 			game = form.save()
+			return redirect('morpion_game', user_id=user.user_id, playerTwo=playerTwo)  # Utilisation de player_two avec un underscore minuscule
+	else:
+		form = MorpionForm(initial=initial_data)
+	return render(request, 'Game/morpion_form.html', {'user': user, 'form': form})
+
+
+
+def morpion_game(request, user_id, playerTwo):
+	user = User.objects.get(user_id=user_id)
+	
+	player_symbols = {
+		'user_login42': 'X',
+		'playerTwo': 'O'
+	}    
+	return render(request, 'Game/morpion_game.html', {'user': user, 'playerTwo': playerTwo, 'player_symbols': player_symbols})
+
+
+
+def save_morpion_game(request):
+	if request.method == "POST":
+		playerOne = request.POST.get('playerOne')
+		playerTwo = request.POST.get('playerTwo')
+		scorePlayerOne = request.POST.get('scorePlayerOne')
+		scorePlayerTwo = request.POST.get('scorePlayerTwo')
+		date = request.POST.get('date')
+		
+			
+		morpion_game = Morpion(playerOne=playerOne, 
+		playerTwo=playerTwo, scorePlayerOne=scorePlayerOne, scorePlayerTwo=scorePlayerTwo, date=date)
+		morpion_game.save()
+		return JsonResponse({'message': 'Scores enregistré avec succès !'})
+	else:
+		return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
+
+
+def game_over(request, user_id, result):
+	user = User.objects.get(user_id=user_id)
+	print(f"Result message: {result}") 
+	return render(request, 'Game/morpion_end.html',{'user': user, 'result': result}) 
+
+
+
+def game_history(request, user_id):
+    user = get_object_or_404(User, user_id=user_id)
+    morpion_games = Morpion.objects.filter(playerOne=user.login42) | Morpion.objects.filter(playerTwo=user.login42)
+
+    games_data = []
+    for game in morpion_games:
+        if game.scorePlayerOne == game.scorePlayerTwo:
+            result = "Égalité"
+        elif (game.scorePlayerOne > game.scorePlayerTwo and game.playerOne == user.login42) or (game.scorePlayerTwo > game.scorePlayerOne and game.playerTwo == user.login42):
+            result = "Gagné"
+        else:
+            result = "Perdu"
+        
+        games_data.append({
+            'game_id': game.id,
+            'playerOne': game.playerOne,
+            'playerTwo': game.playerTwo,
+            'result': result,
+            'date': game.date,
+        })
+
+    context = {
+        'user': user,
+        'games': games_data
+    }
+
+    return render(request, 'Game/morpion_history.html', context)

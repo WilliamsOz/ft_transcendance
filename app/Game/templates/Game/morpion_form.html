@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morpion Form</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #16222a 0%, #3a6073 100%);
+            color: #fff; /* Texte blanc */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Hauteur de la vue */
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .container {
+            max-width: 400px; /* Largeur maximale du conteneur */
+            width: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #1e1e2f; /* Fond formulaire */
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5); /* Ombre formulaire */
+            animation: fadeIn 1s ease-in-out; /* Animation d'apparition */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            margin-bottom: 20px; /* Marge en dessous du titre */
+            font-size: 2.5rem; /* Taille de police */
+            font-weight: bold; /* Gras */
+            text-align: center;
+            background: -webkit-linear-gradient(45deg, #f3ec78, #af4261); /* Dégradé de texte */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px; /* Distance depuis le haut */
+            left: 20px; /* Distance depuis la gauche */
+            text-decoration: none;
+            color: #fff; /* Couleur du texte */
+            background-color: #6c757d; /* Couleur de fond */
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: #5a6268; /* Couleur de fond au survol */
+            transform: translateY(-2px); /* Déplacement au survol */
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%); /* Dégradé de fond du bouton principal */
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2rem; /* Taille de police */
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #ff4b2b; /* Couleur de fond au survol */
+            transform: translateY(-2px); /* Déplacement au survol */
+        }
+
+        .form-control {
+            background-color: #2c2c3e; /* Couleur de fond des champs */
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.3); /* Ombre intérieure */
+        }
+
+        .form-control:focus {
+            background-color: #2c2c3e; /* Couleur de fond des champs */
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* Ombre de focus */
+        }
+    </style>
+</head>
+
+<body>
+    <a href="{% url 'home' user.user_id %}" class="btn btn-secondary back-btn">&larr; Retour</a>
+    <div class="container">
+        <form method="post">
+            <h1>Morpion Game</h1>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary btn-block">Start Game</button>
+        </form>
+    </div>
+</body>
+
+</html>

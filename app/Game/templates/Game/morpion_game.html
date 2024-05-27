@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morpion</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/morpion.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"4 integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">    
+</head>
+<body>
+    <main class="background">
+        <section class="title">
+            <h1 class="title">Morpion</h1>
+            <div>{{ user.login42 }} <span style="color: #09C372">{{ player_symbols.user_login42 }}</span></div>
+            <div> Vs </div>
+            <div>{{ playerTwo }} <span style="color: #498AFB">{{ player_symbols.playerTwo }}</span></div>
+        </section>
+        <section class="display">
+            Player <span class="display-player playerX">X</span>'s turn
+        </section>
+        <section class="container">
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+            <div class="tile"></div>
+        </section>
+        <section class="display announcer hide"></section>
+      
+    </main>
+
+ <form id="morpion_game_over" method="post">
+        {% csrf_token %}
+        <div class="row justify-content-center align-items-center">
+            <h1 id="gameOverMessage" style="display: none;">Partie terminée</h1>
+        </div> 
+        
+    </form>
+    <script src="{% static 'js/morpion.js' %}" 
+        data-user-login42="{{ user.login42 }}"
+        data-player-symbol-user-login42="{{ player_symbols.user_login42 }}" 
+        data-player-two="{{ playerTwo }}"
+        data-player_id="{{ user.user_id }}"
+        ></script>
+
+</body>
+</html>

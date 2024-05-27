@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partie terminée</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #12181B; /* Couleur de fond noir */
+            color: #fff; /* Texte blanc */
+            font-family: 'Press Start 2P', cursive; /* Police de caractères */
+        }
+        .centered {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .btn-replay {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="centered">
+        <form id="morpion_game_over" method="post">
+        {% csrf_token %}
+        <div class="row justify-content-center align-items-center">
+            <h1 id="gameOverMessage" style="display: none;">Partie terminée</h1>
+            <div class="container text-center">
+                <h1>Partie Terminée </h1>
+                <p>Result: {{ result }}</p> 
+                <a href="/morpion_form/{{ user.user_id }}" class="btn btn-danger">Rejouer</a>
+            </div>         
+        </div>
+        </form> <!-- Fermeture de la balise form -->
+    </div>
+</body>
+</html>

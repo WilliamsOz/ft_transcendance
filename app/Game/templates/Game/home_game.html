@@ -2,34 +2,89 @@
 
 {% block content %}
 
-<h1 class="pong">Pong Game</h1>
+<div class="container text-center my-5">
+    <h1 class="pong-title mb-4">Bienvenue sur Pong Game</h1>
+    <div class="row justify-content-center align-items-center mb-5">
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a href="{% url 'rapid_game_auth' user_id=user.user_id %}" class="btn btn-custom btn-lg btn-block">Lancer une partie</a>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a href="{% url 'create_tournament' user_id=user.user_id %}" class="btn btn-custom btn-lg btn-block">Organiser un tournoi</a>
+        </div>
+    </div>
 
-<div class="row justify-content-center align-items-center">
+    <hr class="section-divider">
 
-	<div class="col-md-auto mb-2">
-
-		<a href="{% url 'rapid_game_auth' user_id=user.user_id %}" button id="startGameButton" class="btn btn-outline-success btn-lg btn-block">Lancer une partie rapide</a>
-
-	</div>
-
-	<div class="col-md-auto mb-2">
-
-		<a href="{% url 'create_tournament' user_id=user.user_id %}" button id="startTournamentButton" class="btn btn-outline-primary btn-lg btn-block">Organiser un tournoi</a>
-
-	</div>
-
+    <h1 class="morpion-title mb-4">Bienvenue sur Morpion Game</h1>
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a href="{% url 'morpion_form' user_id=user.user_id %}" class="btn btn-custom btn-lg btn-block">Lancer une partie</a>
+        </div>
+        <div class="col-md-6 col-lg-4 mb-4">
+            <a href="{% url 'game_history' user_id=user.user_id %}" class="btn btn-custom btn-lg btn-block">Historique des parties</a>
+        </div>
+    </div>
 </div>
 
-<h1 class="morpion">Morpion</h1>
+<style>
+    body {
+        background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+        color: #ecf0f1;
+        font-family: 'Roboto', sans-serif;
+    }
 
-<div class="row justify-content-center align-items-center">
+    .title, .pong-title, .morpion-title, .profile-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #f3ec78;
+        background: linear-gradient(45deg, #8e44ad, #3498db);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-	<div class="col-md-auto mb-2">
+    .btn-custom {
+        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 10px 20px;
+        color: #fff;
+        background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+        border: none;
+        border-radius: 30px;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        margin: 5px;
+    }
 
-		<a href="" class="btn btn-outline-success btn-lg btn-block">Lancer une partie</a>
+    .btn-custom:hover {
+        background: linear-gradient(135deg, #3498db 0%, #8e44ad 100%);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
 
-	</div>
+    .section-divider {
+        border-top: 2px solid #ccc;
+        margin: 40px 0;
+    }
 
-</div>
+    .container {
+        color: #fff;
+        text-align: center;
+    }
+
+    .profile-info, .welcome-message {
+        background-color: #2c3e50;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-nav .nav-item .btn {
+        margin: 5px;
+        width: 100%;
+        max-width: 200px;
+    }
+</style>
 
 {% endblock %}

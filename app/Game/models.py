@@ -37,3 +37,18 @@ class Match(models.Model):
 	player2 = models.ForeignKey(PlayersTournament, on_delete=models.CASCADE, related_name='player2_matches')
 	winner = models.ForeignKey(PlayersTournament, on_delete=models.SET_NULL, null=True, blank=True, related_name='won_matches')
 	round = models.IntegerField(default=1)
+
+class Morpion(models.Model):
+	id = models.AutoField(primary_key=True)
+	playerOne = models.CharField(blank=False, max_length=10)
+	playerTwo = models.CharField(blank=False, max_length=10)
+	scorePlayerOne = models.IntegerField(blank=False, default=0)
+	scorePlayerTwo = models.IntegerField(blank=False, default=0)
+	date = models.DateField(default=timezone.now, blank=False)
+
+	def __str__(self):
+		return "MorpionGames"
+
+	class Meta:
+		verbose_name_plural = "Morpion Games"
+	
