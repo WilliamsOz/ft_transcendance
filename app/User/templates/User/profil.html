@@ -2,8 +2,78 @@
 
 {% block content %}
 
-<h1>Profil de {{ user.login42 }}</h1>
-<p>Email : {{ user.email }}</p>
-<p>Login : {{ user.login42 }}</p>
+<div class="container text-center my-5">
+    <div class="profile-header text-center mb-5">
+        <h1 class="profile-title">Profil de {{ user.login42 }}</h1>
+        <p class="profile-subtitle">Bienvenue dans votre espace personnel</p>
+    </div>
+    <div class="profile-info text-center">
+        <p class="profile-detail"><strong>Email :</strong> {{ user.email }}</p>
+        <p class="profile-detail"><strong>Login :</strong> {{ user.login42 }}</p>
+        <div class="mt-4">
+            {% comment %} <a href="{% url 'edit_profile' user_id=user.user_id %}" class="btn btn-custom">Modifier le profil</a> {% endcomment %}
+            {% comment %} <a href="{% url 'change_password' user_id=user.user_id %}" class="btn btn-custom">Changer le mot de passe</a> {% endcomment %}
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+        color: #ecf0f1;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .profile-header {
+        margin-top: 40px;
+    }
+
+    .profile-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #f3ec78;
+        background: linear-gradient(45deg, #8e44ad, #3498db);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .profile-subtitle {
+        font-size: 1.2rem;
+        color: #bdc3c7;
+    }
+
+    .profile-info {
+        background-color: #2c3e50;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-detail {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .btn-custom {
+        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 10px 20px;
+        color: #fff;
+        background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+        border: none;
+        border-radius: 30px;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        margin: 5px;
+    }
+
+    .btn-custom:hover {
+        background: linear-gradient(135deg, #3498db 0%, #8e44ad 100%);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
+</style>
 
 {% endblock %}
