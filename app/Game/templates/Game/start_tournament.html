@@ -2,125 +2,149 @@
 
 {% block content %}
 
-<div style="display: flex; align-items: flex-start;">
+<div class="container my-5">
+    <p class="section-subtitle">Le tournoi commence avec {{ tournament.numberOfPlayer }} joueurs...</p>
 
-	<p style="flex: 1;">Le tournoi commence avec {{ tournament.numberOfPlayer }} joueurs...</p>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-dark table-striped table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th class="tab_tournament">Joueur 1</th>
+                        <th class="tab_tournament">Joueur 2</th>
+                        <th class="tab_tournament">Gagnant</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for match in matches %}
+                    <tr id="match-{{ match.id }}">
+                        <td>{{ match.player1.name }}</td>
+                        <td>{{ match.player2.name }}</td>
+                        <td class="winner">
+                            {% if match.winner %}
+                            {{ match.winner.name }}
+                            {% else %}
+                            Pas encore joué
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-	<table style="flex: 1; margin-left: 21px; border: 1px solid #ccc; padding: 10px; text-align: center;">
+    <form id="end-match-form" method="post">
+        {% csrf_token %}
+    </form>
 
-		<tr>
+    <div class="row justify-content-center align-items-center">
+        <h1 id="tournamentWinner" class="game-over-message" style="display: none;">Tournois terminé, vainqueur : </h1>
+    </div>
 
-			<th class="tab_tournament">Joueur 1</th>
+    <div class="row justify-content-center align-items-center">
+        <h1 id="matchOverMessage" class="game-over-message" style="display: none;">Match terminé, vainqueur : </h1>
+        <h1 id="endOfRound" class="game-over-message" style="display: none;">Manche terminée</h1>
+        <h2 id="nextMatch" class="section-subtitle" style="display: none;">Prochain match :</h2>
+    </div>
 
-			<th class="tab_tournament">Joueur 2</th>
+    <div class="row justify-content-center align-items-center my-4" id="current-match" data-match-id="{{ current_match.id }}">
+        <div class="col-md-4 FightFont">{{ current_match.player1.name }}</div>
+        <div class="col-md-4 FightFont">Vs</div>
+        <div class="col-md-4 FightFont">{{ current_match.player2.name }}</div>
+    </div>
 
-			<th class="tab_tournament">Gagnant</th>
+    <p id="pauseGameInfos" class="text-center font-weight-bold">Appuyer sur la touche "p" pour mettre le jeu en pause ou continuer la partie.</p>
 
-		</tr>
+    <input type="hidden" id="tournamentId" value="{{ tournament.id }}">
+    <button id="continueTournamentButton" class="btn btn-custom btn-block mt-3" style="display: none;">Continuer le tournoi</button>
 
-		{% for match in matches %}
+    <div class="row justify-content-center align-items-center my-4">
+        <canvas id="pongCanvas" width="800" height="400"></canvas>
+        <script src='../../../../../static/js/pongTournament.js'></script>
+    </div>
 
-		<tr id="match-{{ match.id }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            displayGame();
+        });
+    </script>
 
-			<td id="cccns">{{ match.player1.name }}</td>
-
-			<td>{{ match.player2.name }}</td>
-
-			<td class="winner">
-
-				{% if match.winner %}
-
-				{{ match.winner.name }}
-
-				{% else %}
-
-				Pas encore joué
-
-				{% endif %}
-
-			</td>
-
-		</tr>
-
-		{% endfor %}
-
-	</table>
-
+    <div class="row justify-content-center align-items-center my-4" id="commandGameInfos">
+        <div class="col-md-6 text-center">
+            <p class="font-weight-bold">Commandes pour {{ current_match.player1.name }} :</p>
+            <p>Touche "e" pour faire monter le paddle.</p>
+            <p>Touche "d" pour faire descendre le paddle.</p>
+        </div>
+        <div class="col-md-6 text-center">
+            <p class="font-weight-bold">Commandes pour {{ current_match.player2.name }} :</p>
+            <p>Touche "o" pour faire monter le paddle.</p>
+            <p>Touche "l" pour faire descendre le paddle.</p>
+        </div>
+    </div>
 </div>
 
+<style>
+    body {
+        background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+        color: #ecf0f1;
+        font-family: 'Roboto', sans-serif;
+    }
 
-<form id="end-match-form">
-	
-	{% csrf_token %}
-	
-</form>
+    .section-subtitle {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #f3ec78;
+        background: linear-gradient(45deg, #8e44ad, #3498db);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-<div class="row justify-content-center align-items-center">
-	
-	<h1 id="tournamentWinner" style="display: none;">Tournois terminé, vainqueur : </h1>
-	
-</div>
+    .FightFont {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #f3ec78;
+        background: linear-gradient(45deg, #8e44ad, #3498db);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-<div class="row justify-content-center align-items-center">
-	
-	<h1 id="matchOverMessage" style="display: none;">Match terminé, vainqueur : </h1>
-	
-	<h1 id="endOfRound" style="display: none;">Manche terminée</h1>
-	
-	<h2 id="nextMatch" style="display: none; text-align: left;">Prochain match :</h2>
-	
-</div>
+    .game-over-message {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #e74c3c;
+    }
 
-<div style="display: flex; justify-content: space-between;" id="current-match" data-match-id="{{ current_match.id }}">
-	
-	<div class="FightFont">{{ current_match.player1.name }}</div>
-	
-	<div class="FightFont">Vs</div>
-	
-	<div class="FightFont">{{ current_match.player2.name }}</div>
-	
-</div>
 
-<p id="pauseGameInfos" style="text-align: center; font-weight: bold;">Appuyer sur la touche "p" pour mettre le jeu en pause ou continuer la partie.</p>
+    .btn-custom {
+        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 10px 20px;
+        color: #fff;
+        background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+        border: none;
+        border-radius: 30px;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        margin: 5px;
+    }
 
-<input type="hidden" id="tournamentId" value="{{ tournament.id }}">
+    .btn-custom:hover {
+        background: linear-gradient(135deg, #3498db 0%, #8e44ad 100%);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
 
-<button id="continueTournamentButton" type="submit" style="display: none;">Continuer le tournoi</button>
+    .table {
+        background-color: #34495e;
+        color: #ecf0f1;
+    }
 
-<div class="row justify-content-center align-items-center">
-	
-	<canvas id="pongCanvas" width="800" height="400"></canvas>
-
-	<script src='../../../../../static/js/pongTournament.js'></script>
-
-</div>
-
-<script>
-
-	document.addEventListener("DOMContentLoaded", function() {
-		displayGame();
-	});
-
-</script>
-
-<div id="commandGameInfos" style="display: flex; align-items: flex-start;">
-
-	<div style="flex: 1; text-align: left; text-align: center;">
-
-		<p style="font-weight: bold;">Commandes pour {{ current_match.player1.name }} :</p>
-		<p>Touche "e" pour faire monter le paddle.</p>
-		<p>Touche "d" pour faire descendre le paddle.</p>
-
-	</div>
-
-	<div style="flex: 1; text-align: right; text-align: center;">
-
-		<p style="font-weight: bold;">Commandes pour {{ current_match.player2.name }} :</p>
-		<p>Touche "o" pour faire monter le paddle.</p>
-		<p>Touche "l" pour faire descendre le paddle.</p>
-
-	</div>
-
-</div>
+    .table th, .table td {
+        border: 1px solid #444;
+    }
+</style>
 
 {% endblock %}
