@@ -2,24 +2,72 @@
 
 {% block content %}
 
-<h2>Qui joue ?</h2>
+<div class="container text-center my-5">
+    <h2 class="section-title mb-4">Qui joue ?</h2>
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6 col-lg-4">
+            <form action="" method="post" class="form-container">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Envoyer" class="btn btn-custom btn-block mt-3">
+            </form>
+        </div>
+    </div>
 
-<form action="" method="post">
+    <h3 class="section-subtitle mb-4">Ou</h3>
 
-	{% csrf_token %}
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <form action="{% url 'ia_game_auth' user_id=user.user_id %}">
+                <button type="submit" class="btn btn-custom btn-block">Jouer contre une IA</button>
+            </form>
+        </div>
+    </div>
+</div>
 
-	{{ form.as_p }}
+<style>
+    body {
+        background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+        color: #ecf0f1;
+        font-family: 'Roboto', sans-serif;
+    }
 
-	<input type="submit" value="Envoyer">
+    .section-title, .section-subtitle {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #f3ec78;
+        background: linear-gradient(45deg, #8e44ad, #3498db);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-</form>
+    .form-container {
+        background-color: #2c3e50;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
 
-<h3>Ou</h3>
+    .btn-custom {
+        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 10px 20px;
+        color: #fff;
+        background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+        border: none;
+        border-radius: 30px;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        margin: 5px;
+    }
 
-<form action="{% url 'ia_game_auth' user_id=user.user_id %}">
-
-	<button type="submit">Jouer contre une IA</button>
-
-</form>
+    .btn-custom:hover {
+        background: linear-gradient(135deg, #3498db 0%, #8e44ad 100%);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
+</style>
 
 {% endblock %}

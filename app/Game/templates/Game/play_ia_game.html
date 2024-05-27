@@ -2,40 +2,92 @@
 
 {% block content %}
 
-<div style="display: flex; justify-content: space-between;">
+<div class="container text-center my-5">
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-4">
+            <div class="FightFont">{{ playerOne }}</div>
+        </div>
+        <div class="col-md-4">
+            <div class="FightFont">Vs</div>
+        </div>
+        <div class="col-md-4">
+            <div class="FightFont">IA</div>
+        </div>
+    </div>
 
-	<div class="FightFont">{{ playerOne }}</div>
+    <form id="gameOverForm" method="post">
+        {% csrf_token %}
+        <div class="row justify-content-center align-items-center">
+            <h1 id="gameOverMessage" class="game-over-message" style="display: none;">Partie terminée, vainqueur : </h1>
+        </div>
+    </form>
 
-	<div class="FightFont">Vs</div>
-
-	<div class="FightFont">IA</div>
-
+    <div class="row justify-content-center align-items-center">
+        <canvas id="pongCanvas" width="800" height="400"></canvas>
+    </div>
 </div>
 
-<form id="gameOverForm" method="post">
+<style>
+    body {
+        background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+        color: #ecf0f1;
+        font-family: 'Roboto', sans-serif;
+    }
 
-	{% csrf_token %}
+    .FightFont {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #f3ec78;
+        background: linear-gradient(45deg, #8e44ad, #3498db);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
 
-	<div class="row justify-content-center align-items-center">
+    .game-over-message {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #e74c3c;
+    }
 
-		<h1 id="gameOverMessage" style="display: none;">Partie terminée, vainqueur : </h1>
+    .container {
+        color: #fff;
+        text-align: center;
+    }
 
-	</div>
+    .navbar-nav .nav-item .btn {
+        margin: 5px;
+        width: 100%;
+        max-width: 200px;
+    }
 
-</form>
+	.btn-custom {
+        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding: 10px 20px;
+        color: #fff;
+        background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+        border: none;
+        border-radius: 30px;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        margin: 5px;
+    }
+
+    .btn-custom:hover {
+        background: linear-gradient(135deg, #3498db 0%, #8e44ad 100%);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-2px);
+    }
+</style>
 
 <script>
-
-	document.addEventListener("DOMContentLoaded", function() {
-		displayGame();
-	});
-
+    document.addEventListener("DOMContentLoaded", function() {
+        displayGame();
+    });
 </script>
 
-<div class="row justify-content-center align-items-center">
+<script src='../../../../../static/js/pongIA.js'></script>
 
-	<canvas id="pongCanvas" width="800" height="400"></canvas>
-
-	<script src='../../../../../static/js/pongIA.js'></script>
-
-</div>
+{% endblock %}
