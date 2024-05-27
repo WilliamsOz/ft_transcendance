@@ -1,0 +1,41 @@
+{% extends 'templates/app/base.html' %}
+
+{% block content %}
+
+<div style="display: flex; justify-content: space-between;">
+
+	<div class="FightFont">{{ playerOne }}</div>
+
+	<div class="FightFont">Vs</div>
+
+	<div class="FightFont">IA</div>
+
+</div>
+
+<form id="gameOverForm" method="post">
+
+	{% csrf_token %}
+
+	<div class="row justify-content-center align-items-center">
+
+		<h1 id="gameOverMessage" style="display: none;">Partie terminée, vainqueur : </h1>
+
+	</div>
+
+</form>
+
+<script>
+
+	document.addEventListener("DOMContentLoaded", function() {
+		displayGame();
+	});
+
+</script>
+
+<div class="row justify-content-center align-items-center">
+
+	<canvas id="pongCanvas" width="800" height="400"></canvas>
+
+	<script src='../../../../../static/js/pongIA.js'></script>
+
+</div>

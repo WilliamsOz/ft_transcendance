@@ -1,0 +1,126 @@
+{% extends 'templates/app/base.html' %}
+
+{% block content %}
+
+<div style="display: flex; align-items: flex-start;">
+
+	<p style="flex: 1;">Le tournoi commence avec {{ tournament.numberOfPlayer }} joueurs...</p>
+
+	<table style="flex: 1; margin-left: 21px; border: 1px solid #ccc; padding: 10px; text-align: center;">
+
+		<tr>
+
+			<th class="tab_tournament">Joueur 1</th>
+
+			<th class="tab_tournament">Joueur 2</th>
+
+			<th class="tab_tournament">Gagnant</th>
+
+		</tr>
+
+		{% for match in matches %}
+
+		<tr id="match-{{ match.id }}">
+
+			<td id="cccns">{{ match.player1.name }}</td>
+
+			<td>{{ match.player2.name }}</td>
+
+			<td class="winner">
+
+				{% if match.winner %}
+
+				{{ match.winner.name }}
+
+				{% else %}
+
+				Pas encore joué
+
+				{% endif %}
+
+			</td>
+
+		</tr>
+
+		{% endfor %}
+
+	</table>
+
+</div>
+
+
+<form id="end-match-form">
+	
+	{% csrf_token %}
+	
+</form>
+
+<div class="row justify-content-center align-items-center">
+	
+	<h1 id="tournamentWinner" style="display: none;">Tournois terminé, vainqueur : </h1>
+	
+</div>
+
+<div class="row justify-content-center align-items-center">
+	
+	<h1 id="matchOverMessage" style="display: none;">Match terminé, vainqueur : </h1>
+	
+	<h1 id="endOfRound" style="display: none;">Manche terminée</h1>
+	
+	<h2 id="nextMatch" style="display: none; text-align: left;">Prochain match :</h2>
+	
+</div>
+
+<div style="display: flex; justify-content: space-between;" id="current-match" data-match-id="{{ current_match.id }}">
+	
+	<div class="FightFont">{{ current_match.player1.name }}</div>
+	
+	<div class="FightFont">Vs</div>
+	
+	<div class="FightFont">{{ current_match.player2.name }}</div>
+	
+</div>
+
+<p id="pauseGameInfos" style="text-align: center; font-weight: bold;">Appuyer sur la touche "p" pour mettre le jeu en pause ou continuer la partie.</p>
+
+<input type="hidden" id="tournamentId" value="{{ tournament.id }}">
+
+<button id="continueTournamentButton" type="submit" style="display: none;">Continuer le tournoi</button>
+
+<div class="row justify-content-center align-items-center">
+	
+	<canvas id="pongCanvas" width="800" height="400"></canvas>
+
+	<script src='../../../../../static/js/pongTournament.js'></script>
+
+</div>
+
+<script>
+
+	document.addEventListener("DOMContentLoaded", function() {
+		displayGame();
+	});
+
+</script>
+
+<div id="commandGameInfos" style="display: flex; align-items: flex-start;">
+
+	<div style="flex: 1; text-align: left; text-align: center;">
+
+		<p style="font-weight: bold;">Commandes pour {{ current_match.player1.name }} :</p>
+		<p>Touche "e" pour faire monter le paddle.</p>
+		<p>Touche "d" pour faire descendre le paddle.</p>
+
+	</div>
+
+	<div style="flex: 1; text-align: right; text-align: center;">
+
+		<p style="font-weight: bold;">Commandes pour {{ current_match.player2.name }} :</p>
+		<p>Touche "o" pour faire monter le paddle.</p>
+		<p>Touche "l" pour faire descendre le paddle.</p>
+
+	</div>
+
+</div>
+
+{% endblock %}

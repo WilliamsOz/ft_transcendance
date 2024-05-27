@@ -1,0 +1,65 @@
+{% extends 'templates/app/base.html' %}
+
+{% block content %}
+
+<div id="playersInfos" style="display: flex; justify-content: space-between;">
+
+	<div class="FightFont">{{ playerOne }}</div>
+
+	<div class="FightFont">Vs</div>
+
+	<div class="FightFont">{{ playerTwo }}</div>
+
+</div>
+
+<p id="pauseGameInfos" style="text-align: center; font-weight: bold;">Appuyer sur la touche "p" pour mettre le jeu en pause ou continuer la partie.</p>
+
+<form id="gameOverForm" method="post">
+
+	{% csrf_token %}
+
+	<div class="row justify-content-center align-items-center">
+
+		<h1 id="gameOverMessage" style="display: none;">Partie terminée, vainqueur : </h1>
+
+	</div>
+
+</form>
+
+<script>
+
+	document.addEventListener("DOMContentLoaded", function() {
+		displayGame();
+	});
+
+</script>
+
+<div class="row justify-content-center align-items-center">
+
+	<canvas id="pongCanvas" width="800" height="400"></canvas>
+
+	<script src='../../../../../static/js/pong.js'></script>
+
+</div>
+
+<div id="commandGameInfos" style="display: flex; align-items: flex-start;">
+
+	<div style="flex: 1; text-align: left; text-align: center;">
+
+		<p style="font-weight: bold;">Commandes pour {{ playerOne }} :</p>
+		<p>Touche "e" pour faire monter le paddle.</p>
+		<p>Touche "d" pour faire descendre le paddle.</p>
+
+	</div>
+
+	<div style="flex: 1; text-align: right; text-align: center;">
+
+		<p style="font-weight: bold;">Commandes pour {{ playerTwo }} :</p>
+		<p>Touche "o" pour faire monter le paddle.</p>
+		<p>Touche "l" pour faire descendre le paddle.</p>
+
+	</div>
+
+</div>
+
+{% endblock %}

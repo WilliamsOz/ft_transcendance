@@ -1,0 +1,35 @@
+{% extends 'templates/app/base.html' %}
+
+{% block content %}
+
+<h1 class="pong">Pong Game</h1>
+
+<div class="row justify-content-center align-items-center">
+
+	<div class="col-md-auto mb-2">
+
+		<a href="{% url 'rapid_game_auth' user_id=user.user_id %}" button id="startGameButton" class="btn btn-outline-success btn-lg btn-block">Lancer une partie rapide</a>
+
+	</div>
+
+	<div class="col-md-auto mb-2">
+
+		<a href="{% url 'create_tournament' user_id=user.user_id %}" button id="startTournamentButton" class="btn btn-outline-primary btn-lg btn-block">Organiser un tournoi</a>
+
+	</div>
+
+</div>
+
+<h1 class="morpion">Morpion</h1>
+
+<div class="row justify-content-center align-items-center">
+
+	<div class="col-md-auto mb-2">
+
+		<a href="" class="btn btn-outline-success btn-lg btn-block">Lancer une partie</a>
+
+	</div>
+
+</div>
+
+{% endblock %}

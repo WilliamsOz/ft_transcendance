@@ -1,0 +1,17 @@
+{% extends 'templates/app/base.html' %}
+
+{% block content %}
+
+<h1>Qui jouer contre une IA ?</h1>
+
+<form action="" method="post">
+
+	{% csrf_token %}
+
+	{{ form.as_p }}
+
+	<input type="submit" value="Envoyer">
+
+</form>
+
+{% endblock %}

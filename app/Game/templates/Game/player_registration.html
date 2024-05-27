@@ -1,0 +1,25 @@
+{% extends 'templates/app/base.html' %}
+
+{% block content %}
+
+<h2>Enregistrement des joueurs</h2>
+
+<form method="post">
+
+	{% csrf_token %}
+
+	{% for form in player_forms %}
+
+	<div class="form-group">
+
+		{{ form.name.label_tag }} {{ form.name }}
+
+	</div>
+
+	{% endfor %}
+
+	<button type="submit">Enregistrer les joueurs</button>
+
+</form>
+
+{% endblock %}

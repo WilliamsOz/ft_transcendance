@@ -1,0 +1,25 @@
+{% extends 'templates/app/base.html' %}
+
+{% block content %}
+
+<h2>Qui joue ?</h2>
+
+<form action="" method="post">
+
+	{% csrf_token %}
+
+	{{ form.as_p }}
+
+	<input type="submit" value="Envoyer">
+
+</form>
+
+<h3>Ou</h3>
+
+<form action="{% url 'ia_game_auth' user_id=user.user_id %}">
+
+	<button type="submit">Jouer contre une IA</button>
+
+</form>
+
+{% endblock %}

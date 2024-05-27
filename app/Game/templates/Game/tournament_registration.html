@@ -1,0 +1,21 @@
+{% extends 'templates/app/base.html' %}
+
+{% block content %}
+
+<h2>Saisissez les noms des joueurs :</h2>
+
+<form method="post">
+
+	{% csrf_token %}
+
+	{% for form in player_forms %}
+
+	{{ form.as_p }}
+
+	{% endfor %}
+
+	<button type="submit">Enregistrer</button>
+
+</form>
+
+{% endblock %}

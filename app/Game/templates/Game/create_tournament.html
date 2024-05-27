@@ -1,0 +1,17 @@
+{% extends 'templates/app/base.html' %}
+
+{% block content %}
+
+<h2>Combien de personnes veulent jouer, 4 ou 8 ?</h2>
+
+<form method="post">
+
+	{% csrf_token %}
+
+	{{ tournament_form.as_p }}
+
+	<button type="submit">Suivant</button>
+
+</form>
+
+{% endblock %}
