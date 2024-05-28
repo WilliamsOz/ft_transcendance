@@ -17,6 +17,13 @@ clean:
 
 fclean: clean
 	$(RM_IMAGE_COMMAND) postgres:13-alpine
+	rm -rf app/User/__pycache__
+	rm -rf app/User/migrations/__pycache__
+	rm -rf app/User/migrations/0001_initial.py
+	rm -rf app/Game/__pycache__
+	rm -rf app/Game/migrations/__pycache__
+	rm -rf app/Game/migrations/0001_initial.py
+	rm -rf app/app/__pycache__
 
 re: fclean all
 
