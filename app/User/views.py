@@ -11,8 +11,8 @@ from User.models import User
 
 @login_required
 def redirect_to_home(request):
-    user_id = request.user.id
-    return redirect('home', id=user_id)
+    id = request.user.id
+    return redirect('home', id=id)
 
 def log(request):
 	return render(request, 'templates/app/log.html')
