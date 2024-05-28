@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from User.views import log, home, create_user, oauth_token, profil
+from User.views import log, home, create_user, oauth_token, profil, RGPD_Politique
 from Game.views import rapid_game_auth, create_tournament, play_game, home_game, player_registration, start_tournament, end_match, ia_game, play_ia_game
 from Game.views import morpion_game , save_morpion_game, game_history, game_over , morpion_form
 
@@ -51,5 +51,8 @@ urlpatterns = [
     path('save_morpion_game/', save_morpion_game, name='save_morpion_game'),
     path('game_over/<int:user_id>/<str:result>/', game_over, name='game_over'),
     path('morpion_history/<int:user_id>/', game_history, name='game_history'),
+
+
+	path('RGPD_Politique/', RGPD_Politique, name='RGPD_Politique'),
 
 ]

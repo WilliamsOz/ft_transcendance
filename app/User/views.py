@@ -63,3 +63,6 @@ def create_user(request):
 def profil(request, user_id):
 	user = User.objects.get(user_id=user_id)
 	return render(request, 'User/profil.html', {'user': user})
+
+def RGPD_Politique(request):
+    return render(request, 'User/RGPD_Politique.html') 
