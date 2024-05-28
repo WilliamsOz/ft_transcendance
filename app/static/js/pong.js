@@ -59,8 +59,8 @@ function drawStartText() {
 function	setUpDataForGame() {
 	gameStarted = false;
 	gamePaused = false;
-	leftPlayer = document.querySelector(".FightFont:nth-child(1)");
-	rightPlayer = document.querySelector(".FightFont:nth-child(3)");
+	leftPlayer = document.querySelector(".fightFont:nth-child(1)");
+	rightPlayer = document.querySelector(".fightFont:nth-child(3)");
 	scorePlayerOne = 0;
 	scorePlayerTwo = 0;
 	ballSpeedX = 5;
@@ -230,9 +230,9 @@ document.addEventListener("keydown", function(event) {
 
 function whoWinTheGame() {
 	if (scorePlayerOne > scorePlayerTwo)
-		winner = document.querySelector('.FightFont:nth-child(1)').textContent;
+		winner = document.querySelector('.fightFont:nth-child(1)').textContent;
 	else
-		winner = document.querySelector('.FightFont:nth-child(3)').textContent;
+		winner = document.querySelector('.fightFont:nth-child(3)').textContent;
 	return winner;
 }
 
