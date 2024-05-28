@@ -136,3 +136,18 @@ CACHES = {
 		'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
 	}
 }
+
+# Needed to use AbstractUser and AbstractBaseUser
+AUTH_USER_MODEL = 'User.User'
+
+# Page to redirect to if false at @login_required decorator
+LOGIN_URL = 'log'
+
+# Page to redirect to if user is already connected
+LOGIN_REDIRECT_URL = 'redirect_to_home'
+
+# Page to redirect to after user disconnect
+LOGOUT_REDIRECT_URL = 'log'
+
+# URL on which Django will serve media
+MEDIA_URL = '/media/'

@@ -103,13 +103,13 @@
         <div class="container-fluid">
             <div class="navbar-nav mx-auto"> <!-- Alignement centralisé -->
                 <div class="nav-item">
-                    <a href="{% url 'home' user_id=user.user_id %}" class="btn btn-custom">Accueil</a>
+                    <a href="{% url 'home' id=user.id %}" class="btn btn-custom">Accueil</a>
                 </div>
                 <div class="nav-item">
-                    <a href="{% url 'home_game' user_id=user.user_id %}" class="btn btn-custom">Jouer</a>
+                    <a href="{% url 'home_game' id=user.id %}" class="btn btn-custom">Jouer</a>
                 </div>
                 <div class="nav-item">
-                    <a href="{% url 'profil' user_id=user.user_id %}" class="btn btn-custom">Profil</a>
+                    <a href="{% url 'profil' id=user.id %}" class="btn btn-custom">Profil</a>
                 </div>
             </div>
         </div>
@@ -123,7 +123,7 @@
                 <div class="welcome-message">
                     <h2>Bienvenue sur ft_transcendance !</h2>
                     <p>Découvrez notre jeu passionnant et rejoignez une communauté de joueurs dédiée.</p>
-                    <a href="{% url 'home_game' user_id=user.user_id %}" class="btn btn-custom">Commencer à jouer</a>
+                    <a href="{% url 'home_game' id=user.id %}" class="btn btn-custom">Commencer à jouer</a>
                 </div>
                 {% endif %}
                 {% endblock %}

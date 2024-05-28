@@ -6,10 +6,10 @@
     <h1 class="pong-title mb-4">Bienvenue sur Pong Game</h1>
     <div class="row justify-content-center align-items-center mb-5">
         <div class="col-md-6 col-lg-4 mb-4">
-            <a href="{% url 'rapid_game_auth' user_id=user.user_id %}" class="btn btn-custom btn-lg btn-block">Lancer une partie</a>
+            <a href="{% url 'rapid_game_auth' id=user.id %}" class="btn btn-custom btn-lg btn-block">Lancer une partie</a>
         </div>
         <div class="col-md-6 col-lg-4 mb-4">
-            <a href="{% url 'create_tournament' user_id=user.user_id %}" class="btn btn-custom btn-lg btn-block">Organiser un tournoi</a>
+            <a href="{% url 'create_tournament' id=user.id %}" class="btn btn-custom btn-lg btn-block">Organiser un tournoi</a>
         </div>
     </div>
 
@@ -18,10 +18,10 @@
     <h1 class="morpion-title mb-4">Bienvenue sur Morpion Game</h1>
     <div class="row justify-content-center align-items-center">
         <div class="col-md-6 col-lg-4 mb-4">
-            <a href="{% url 'morpion_form' user_id=user.user_id %}" class="btn btn-custom btn-lg btn-block">Lancer une partie</a>
+            <a href="{% url 'morpion_form' id=user.id %}" class="btn btn-custom btn-lg btn-block">Lancer une partie</a>
         </div>
         <div class="col-md-6 col-lg-4 mb-4">
-            <a href="{% url 'game_history' user_id=user.user_id %}" class="btn btn-custom btn-lg btn-block">Historique des parties</a>
+            <a href="{% url 'game_history' id=user.id %}" class="btn btn-custom btn-lg btn-block">Historique des parties</a>
         </div>
     </div>
 </div>
