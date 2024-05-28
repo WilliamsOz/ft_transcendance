@@ -7,43 +7,43 @@ import json, random
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-def home_game(request, user_id):
-	user = User.objects.get(user_id=user_id)
+def home_game(request, id):
+	user = User.objects.get(id=id)
 	return render(request, 'Game/home_game.html', {'user': user})
 
-def play_game(request, user_id, playerOne, playerTwo):
-	user = User.objects.get(user_id=user_id)
+def play_game(request, id, playerOne, playerTwo):
+	user = User.objects.get(id=id)
 	return render(request, 'Game/play_game.html', {'user': user, 'playerOne': playerOne, 'playerTwo': playerTwo})
 
-def play_ia_game(request, user_id, playerOne):
-	user = User.objects.get(user_id=user_id)
+def play_ia_game(request, id, playerOne):
+	user = User.objects.get(id=id)
 	return render(request, 'Game/play_ia_game.html', {'user': user, 'playerOne': playerOne})
 
-def rapid_game_auth(request, user_id):
-	user = User.objects.get(user_id=user_id)
+def rapid_game_auth(request, id):
+	user = User.objects.get(id=id)
 	if request.method == 'POST':
 		form = PongGameForm(request.POST)
 		if form.is_valid():
 			playerOne = form.cleaned_data['playerOne']
 			playerTwo = form.cleaned_data['playerTwo']
-			return redirect('play_game', user_id=user_id, playerOne=playerOne, playerTwo=playerTwo)
+			return redirect('play_game', id=id, playerOne=playerOne, playerTwo=playerTwo)
 	else:
 		form = PongGameForm()
 	return render(request, 'Game/rapid_game_auth.html', {'user': user, 'form': form})
 
-def ia_game(request, user_id):
-	user = User.objects.get(user_id=user_id)
+def ia_game(request, id):
+	user = User.objects.get(id=id)
 	if request.method == 'POST':
 		form = PongGameFormIA(request.POST)
 		if form.is_valid():
 			playerOne = form.cleaned_data['playerOne']
-			return redirect('play_ia_game', user_id=user_id, playerOne=playerOne)
+			return redirect('play_ia_game', id=id, playerOne=playerOne)
 	else:
 		form = PongGameFormIA()
 	return render(request, 'Game/ia_game.html', {'user': user, 'form': form})
 
-def create_tournament(request, user_id):
-	user = get_object_or_404(User, user_id=user_id)
+def create_tournament(request, id):
+	user = get_object_or_404(User, id=id)
 	if request.method == 'POST':
 		tournament_form = PongTournamentForm(request.POST)
 		if tournament_form.is_valid():
@@ -52,14 +52,14 @@ def create_tournament(request, user_id):
 				numberOfPlayer=tournament_form.cleaned_data['numberOfPlayer']
 			)
 			# Redirige vers la vue de registration des joueurs
-			return HttpResponseRedirect(reverse('player_registration', args=[user_id, tournament.id]))
+			return HttpResponseRedirect(reverse('player_registration', args=[id, tournament.id]))
 	else:
 		tournament_form = PongTournamentForm()
 	return render(request, 'Game/create_tournament.html', {'user': user, 'tournament_form': tournament_form})
 
-def player_registration(request, user_id, tournament_id):
+def player_registration(request, id, tournament_id):
 	# Récupère l'utilisateur et le tournoi, ou retourne une erreur 404
-	user = get_object_or_404(User, user_id=user_id)
+	user = get_object_or_404(User, id=id)
 	tournament = get_object_or_404(PongTournament, id=tournament_id)
 	if request.method == 'POST':
 		# Créer une liste de formulaire de joueurs avec les données de la requête POST
@@ -70,14 +70,14 @@ def player_registration(request, user_id, tournament_id):
 				player = form.save()
 				tournament.players.add(player)
 			# Redirige vers la vue de démarrage du tournoi
-			return HttpResponseRedirect(reverse('start_tournament', args=[user_id, tournament_id]))
+			return HttpResponseRedirect(reverse('start_tournament', args=[id, tournament_id]))
 	else:
 		player_forms = [PlayerTournamentForm(prefix=str(i)) for i in range(tournament.numberOfPlayer)]
 	return render(request, 'Game/player_registration.html', {'user': user, 'player_forms': player_forms, 'tournament_id': tournament_id})
 
-def start_tournament(request, user_id, tournament_id):
+def start_tournament(request, id, tournament_id):
 	# Récupère l'utilisateur
-	user = get_object_or_404(User, user_id=user_id)
+	user = get_object_or_404(User, id=id)
 	
 	# On récupère l'id du tournoi
 	tournament = get_object_or_404(PongTournament, id=tournament_id)
@@ -199,23 +199,23 @@ def advance_tournament_round(tournament_id):
 		tournament.save()
 
 
-def morpion_form(request, user_id):
-	user = User.objects.get(user_id=user_id)
+def morpion_form(request, id):
+	user = User.objects.get(id=id)
 	initial_data = {'playerOne': user.login42}
 	if request.method == 'POST':
 		form = MorpionForm(request.POST, initial=initial_data)
 		if form.is_valid():
 			playerTwo = form.cleaned_data['playerTwo']
 # 			game = form.save()
-			return redirect('morpion_game', user_id=user.user_id, playerTwo=playerTwo)  # Utilisation de player_two avec un underscore minuscule
+			return redirect('morpion_game', id=user.id, playerTwo=playerTwo)  # Utilisation de player_two avec un underscore minuscule
 	else:
 		form = MorpionForm(initial=initial_data)
 	return render(request, 'Game/morpion_form.html', {'user': user, 'form': form})
 
 
 
-def morpion_game(request, user_id, playerTwo):
-	user = User.objects.get(user_id=user_id)
+def morpion_game(request, id, playerTwo):
+	user = User.objects.get(id=id)
 	
 	player_symbols = {
 		'user_login42': 'X',
@@ -242,15 +242,15 @@ def save_morpion_game(request):
 		return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
 
 
-def game_over(request, user_id, result):
-	user = User.objects.get(user_id=user_id)
+def game_over(request, id, result):
+	user = User.objects.get(id=id)
 	print(f"Result message: {result}") 
 	return render(request, 'Game/morpion_end.html',{'user': user, 'result': result}) 
 
 
 
-def game_history(request, user_id):
-    user = get_object_or_404(User, user_id=user_id)
+def game_history(request, id):
+    user = get_object_or_404(User, id=id)
     morpion_games = Morpion.objects.filter(playerOne=user.login42) | Morpion.objects.filter(playerTwo=user.login42)
 
     games_data = []
