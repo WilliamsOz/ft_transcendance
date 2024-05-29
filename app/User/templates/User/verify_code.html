@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vérification du code</title>
+</head>
+<body>
+    <h1>Vérification du code</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="code">Code de vérification :</label>
+        <input type="text" id="code" name="code" required>
+        <button type="submit">Vérifier</button>
+    </form>
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+</body>
+</html>

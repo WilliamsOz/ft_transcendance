@@ -9,6 +9,24 @@ from django.views.generic import View
 from django.contrib.auth.decorators import login_required
 from User.models import User
 
+from .utils import send_verification_code ##
+from .models import VerificationCode ##
+
+def verify_code(request):
+    if request.method == 'POST':
+        code = request.POST.get('code')
+        user = request.user
+        try:
+            verification_code = VerificationCode.objects.get(user=user, code=code)
+            if verification_code.is_valid():
+                login(request, user)
+                return redirect('home')  # Redirigez vers la page d'accueil après la connexion
+            else:
+                return render(request, 'verify_code.html', {'error': 'Code de vérification invalide ou expiré.'})
+        except VerificationCode.DoesNotExist:
+            return render(request, 'verify_code.html', {'error': 'Code de vérification invalide.'})
+    return render(request, 'verify_code.html')
+
 @login_required
 def redirect_to_home(request):
     user_id = request.user.id
@@ -52,7 +70,9 @@ def create_user(request):
 	if user_data:
 		try:
 			user = User.objects.get(login42=user_data.get('login'))
-			login(request, user)
+			send_verification_code(user) ##
+			# login(request, user) ##
+			return redirect('verify_code')
 		except User.DoesNotExist:
 			user = User()
 			user.login42 = user_data.get('login')
@@ -60,6 +80,7 @@ def create_user(request):
 			user.token = user_data.get('token')
 			user.profile_photo = user_data['image']['versions']['small']
 			user.save()
+			send_verification_code(user)
 			login(request, user)
 		return redirect('home', id=user.id)
 	return redirect('log')
