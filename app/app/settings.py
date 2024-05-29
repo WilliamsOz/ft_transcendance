@@ -151,3 +151,7 @@ LOGOUT_REDIRECT_URL = 'log'
 
 # URL on which Django will serve media
 MEDIA_URL = '/media/'
+
+# SSL
+SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

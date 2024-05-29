@@ -32,7 +32,7 @@ def oauth_token(request):
 			'client_id': os.environ.get('CLIENT_ID'),
 			'client_secret': os.environ.get('CLIENT_SECRET'),
 			'code': code,
-			'redirect_uri': 'http://localhost:3003/oauth/token',
+			'redirect_uri': 'https://localhost:3003/oauth/token',
 		}
 		response = requests.post(url, data=data)
 		data = response.json()

@@ -14,9 +14,9 @@ services:
     volumes:
       - ./app:/app
     command:
-      sh -c "python manage.py makemigrations &&
-      python manage.py migrate
-      && python manage.py runserver 0.0.0.0:${APP_PORT}"
+      sh -c "python manage.py makemigrations && \
+      python manage.py migrate && \
+      gunicorn --certfile=/ssl/local.crt --keyfile=/ssl/local.key --bind 0.0.0.0:${APP_PORT} app.wsgi:application"
     environment:
       DB_HOST: ${DB_HOST}
       DB_NAME: ${DB_NAME}
