@@ -29,8 +29,12 @@
 
 .fightFont{
 	font-family: 'FightFont', sans-serif;
-	font-size: 4.2em;
+	font-size: 2.5em;
 	font-weight: bold;
+	color: #f3ec78;
+	background: linear-gradient(45deg, #8e44ad, #3498db);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
 }
 
 .pong {

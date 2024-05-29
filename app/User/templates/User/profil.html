@@ -13,10 +13,10 @@
     </form>
     <a href="#" onclick="submitLogoutForm();">Se déconnecter</a>
 
+    <script>
+        function submitLogoutForm() {
+            document.getElementById("logoutForm").submit();
+        }
+    </script>
 {% endif %}
-<script>
-    function submitLogoutForm() {
-        document.getElementById("logoutForm").submit();
-    }
-</script>
 {% endblock %}
