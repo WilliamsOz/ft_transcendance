@@ -10,7 +10,7 @@
             <div class="card h-100 text-white bg-dark shadow">
                 <div class="card-body">
                     <h5 class="card-title">Lancer une partie rapide de Ping pong</h5>
-                    <p class="card-text">Jouez immédiatement à une partie rapide et défiez vos amis ou d'autres joueurs en ligne.</p>
+                    <p class="card-text">Jouez immédiatement à une partie rapide et défiez vos amis .</p>
                     <a href="{% url 'rapid_game_auth' id=user.id %}" class="btn btn-custom">Jouer</a>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                 <div class="card-body">
                     <h5 class="card-title">Organiser un tournoi de Ping Pong</h5>
                     <p class="card-text">Créez et organisez vos propres tournois. Invitez vos amis et voyez qui est le meilleur !</p>
-                <a href="{% url 'create_tournament' id=user.id %}" class="btn btn-custom btn-lg btn-block">Organiser un tournoi</a>
+                    <a href="{% url 'create_tournament' id=user.id %}" class="btn btn-custom btn-lg btn-block">Organiser un tournoi</a>
                 </div>
             </div>
         </div>
@@ -34,8 +34,32 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="consentModal" tabindex="-1" aria-labelledby="consentModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="consentModalLabel">Consentement à la Collecte de Données</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Veuillez accepter les conditions d'utilisation pour continuer à utiliser nos services.
+        <a href="{% url 'RGPD_Politique' id=user.id %}" class="text-white">Politique de Confidentialité</a>.
+        <form method="post" action="{% url 'home' id=user.id %}">
+            {% csrf_token %}
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="consent" name="consent" required>
+                <label class="form-check-label" for="consent">J'accepte la politique de confidentialité</label>
             </div>
+            <button type="submit" class="btn btn-custom">Continuer</button>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
 <style>
@@ -50,11 +74,6 @@
         background: linear-gradient(45deg, #8e44ad, #3498db);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-    }
-
-    .sub-title {
-        font-size: 2rem;
-        color: #8e44ad;
     }
 
     .btn-custom {
@@ -93,5 +112,14 @@
         color: #bdc3c7;
     }
 </style>
+
+<script>
+    // Automatically show the modal if user has not given consent
+    $(document).ready(function() {
+        {% if not user.consent_RGPD %}
+            $('#consentModal').modal('show');
+        {% endif %}
+    });
+</script>
 
 {% endblock %}

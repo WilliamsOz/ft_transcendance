@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consentement à la Collecte de Données</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+            color: #ecf0f1;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #34495e;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #8e44ad, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .btn-custom {
+            display: inline-block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            color: #fff;
+            background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-custom:hover {
+            background: linear-gradient(135deg, #3498db 0%, #8e44ad 100%);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .form-check-label {
+            margin-left: 10px;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h1 class="welcome-title mb-4">Consentement à la Collecte de Données</h1>
+        <p>Pour utiliser nos services, vous devez accepter notre <a href="{% url 'RGPD_Politique' id=user.id %}">politique de confidentialité</a>.</p>
+        <form method="post" action="{% url 'consent' user_id=user.id %}">
+            {% csrf_token %}
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="consent" name="consent" required>
+                <label class="form-check-label" for="consent">J'accepte la politique de confidentialité</label>
+            </div>
+            <button type="submit" class="btn btn-custom">Continuer</button>
+        </form>
+    </div>
+</body>
+</html>
+

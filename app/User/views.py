@@ -8,6 +8,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.views.generic import View
 from django.contrib.auth.decorators import login_required
 from User.models import User
+from django.shortcuts import get_object_or_404
 
 @login_required
 def redirect_to_home(request):
@@ -18,9 +19,30 @@ def log(request):
 	return render(request, 'templates/app/log.html')
 
 @login_required
+def delete_user(request, id):
+    if request.method == 'POST':
+        user = get_object_or_404(User, id=id)
+        if user == request.user: 
+            user.delete()
+            return redirect('log')
+    return render(request, 'templates/app/delete_user.html', {'user': user})
+
+@login_required
 def home(request, id):
-	user = User.objects.get(id=id)
-	return render(request, 'templates/app/home.html', {'user': user})
+    user = get_object_or_404(User, id=id)
+    if not user.consent_RGPD:
+        return redirect('consent', user_id=user.id)
+    return render(request, 'templates/app/home.html', {'user': user})
+
+@login_required
+def consent(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        user.consent_RGPD = True
+        user.save()
+        return redirect('home', id=user.id)
+    return render(request, 'templates/app/consent.html', {'user': user})
+
 
 def oauth_token(request):
 	load_dotenv()
