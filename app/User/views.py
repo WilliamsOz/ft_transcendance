@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from User.models import User
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+import random
+import string
 
 
 
@@ -30,18 +32,26 @@ def delete_user(request, id):
             return redirect('log')
     return render(request, 'templates/app/delete_user.html', {'user': user})
 
-@login_required
+login_required
 def anonymize_user(request, id):
     user = get_object_or_404(User, id=id)
     if request.method == 'POST' and user == request.user:
-        user.login42 = f'anonymous_{user.id}'
+        # Générer un login42 unique
+        unique_login = False
+        while not unique_login:
+            new_login42 = f'anonymous_{user.id}_{random.choice(string.ascii_lowercase)}{random.randint(1, 10000)}'
+            if not User.objects.filter(login42=new_login42).exists():
+                unique_login = True
+
+        user.login42 = new_login42
         user.email = f'anonymous_{user.id}@example.com'
+        user.username = new_login42
+        print(user.username)
         user.profile_photo = 'https://www.gravatar.com/avatar/'
         user.save()
         messages.success(request, 'Vos données personnelles ont été anonymisées.')
         return redirect('home', id=user.id)
     return render(request, 'templates/app/anonymize_user.html', {'user': user})
-
 @login_required
 def home(request, id):
     user = get_object_or_404(User, id=id)
