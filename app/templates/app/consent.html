@@ -74,7 +74,7 @@
     <div class="container text-center">
         <h1 class="welcome-title mb-4">Consentement à la Collecte de Données</h1>
         <p>Pour utiliser nos services, vous devez accepter notre <a href="{% url 'RGPD_Politique' id=user.id %}">politique de confidentialité</a>.</p>
-        <form method="post" action="{% url 'consent' user_id=user.id %}">
+        <form method="post" action="{% url 'consent' id=user.id %}">
             {% csrf_token %}
             <div class="form-group form-check">
                 <input type="checkbox" class="form-check-input" id="consent" name="consent" required>

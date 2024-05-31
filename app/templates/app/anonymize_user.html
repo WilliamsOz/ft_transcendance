@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymiser les données personnelles</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
+            color: #ecf0f1;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .btn-custom {
+            display: inline-block;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            color: #fff;
+            background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-custom:hover {
+            background: linear-gradient(135deg, #3498db 0%, #8e44ad 100%);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center my-5">
+        <h1 class="mb-4">Anonymiser les données personnelles</h1>
+        <p>Êtes-vous sûr de vouloir anonymiser vos données personnelles ? Cette action est irréversible.</p>
+        <form method="post" action="{% url 'anonymize_user' user.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-warning btn-custom">Anonymiser mes données</button>
+            <a href="{% url 'profil' user.id %}" class="btn btn-secondary btn-custom">Annuler</a>
+        </form>
+    </div>
+</body>
+</html>

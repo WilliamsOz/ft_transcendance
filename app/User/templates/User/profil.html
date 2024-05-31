@@ -1,31 +1,10 @@
-{% extends 'templates/app/base.html' %}
-
-{% block content %}
-{% if user.is_authenticated %}
-    <div class="container my-5">
-        <div class="profile-header text-center mb-5">
-            <h1 class="profile-title">Profil de {{ user.login42 }}</h1>
-            <p class="profile-subtitle">Bienvenue dans votre espace personnel</p>
-        </div>
-        <div class="profile-info text-center">
-            <div class="profile-photo mb-4">
-                <img src="{{ user.profile_photo }}" alt="Profile Photo" class="rounded-circle" width="150">
-            </div>
-            <p class="profile-detail"><strong>Email :</strong> {{ user.email }}</p>
-            <p class="profile-detail"><strong>Login :</strong> {{ user.login42 }}</p>
-            <p class="profile-detail"><strong>Consentement :</strong> {{ user.consent_RGPD|yesno:"Oui,Non" }}</p>
-            <form method="post" action="{% url 'delete_user' id=user.id %}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.');" class="d-inline">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger btn-custom">Supprimer le compte</button>
-            </form>
-            <form id="logoutForm" action="{% url 'logout' %}" method="post" style="display: none;">
-                {% csrf_token %}
-                <button type="submit"></button>
-            </form>
-            <a href="#" onclick="submitLogoutForm();" class="btn btn-secondary btn-custom">Se déconnecter</a>
-        </div>
-    </div>
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             background: linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%);
@@ -105,11 +84,44 @@
             background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%);
         }
     </style>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="profile-header text-center mb-5">
+            <h1 class="profile-title">Profil de {{ user.login42 }}</h1>
+            <p class="profile-subtitle">Bienvenue dans votre espace personnel</p>
+        </div>
+        <div class="profile-info text-center">
+            <div class="profile-photo mb-4">
+                <img src="{{ user.profile_photo }}" alt="Profile Photo" class="rounded-circle" width="150">
+            </div>
+            <p class="profile-detail"><strong>Email :</strong> {{ user.email }}</p>
+            <p class="profile-detail"><strong>Login :</strong> {{ user.login42 }}</p>
+            <p class="profile-detail"><strong>Consentement :</strong> {{ user.consent_RGPD|yesno:"Oui,Non" }}</p>
+            
+            <!-- Formulaire pour anonymiser les données -->
+            <form method="post" action="{% url 'anonymize_user' id=user.id  %}" onsubmit="return confirm('Êtes-vous sûr de vouloir anonymiser vos données ? Cette action est irréversible.');" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning btn-custom">Anonymiser mes données</button>
+            </form>
+
+            <form method="post" action="{% url 'delete_user' id=user.id  %}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.');" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-custom">Supprimer le compte</button>
+            </form>
+            
+            <form id="logoutForm" action="{% url 'logout' %}" method="post" style="display: none;">
+                {% csrf_token %}
+                <button type="submit"></button>
+            </form>
+            <a href="#" onclick="submitLogoutForm();" class="btn btn-secondary btn-custom">Se déconnecter</a>
+        </div>
+    </div>
 
     <script>
         function submitLogoutForm() {
             document.getElementById("logoutForm").submit();
         }
     </script>
-{% endif %}
-{% endblock %}
+</body>
+</html>

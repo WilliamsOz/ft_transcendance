@@ -6,9 +6,12 @@ from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.contrib.auth import login, authenticate, logout
 from django.views.generic import View
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required 
 from User.models import User
 from django.shortcuts import get_object_or_404
+from django.contrib import messages
+
+
 
 @login_required
 def redirect_to_home(request):
@@ -28,15 +31,27 @@ def delete_user(request, id):
     return render(request, 'templates/app/delete_user.html', {'user': user})
 
 @login_required
+def anonymize_user(request, id):
+    user = get_object_or_404(User, id=id)
+    if request.method == 'POST' and user == request.user:
+        user.login42 = f'anonymous_{user.id}'
+        user.email = f'anonymous_{user.id}@example.com'
+        user.profile_photo = 'https://www.gravatar.com/avatar/'
+        user.save()
+        messages.success(request, 'Vos données personnelles ont été anonymisées.')
+        return redirect('home', id=user.id)
+    return render(request, 'templates/app/anonymize_user.html', {'user': user})
+
+@login_required
 def home(request, id):
     user = get_object_or_404(User, id=id)
     if not user.consent_RGPD:
-        return redirect('consent', user_id=user.id)
+        return redirect('consent', id=id)
     return render(request, 'templates/app/home.html', {'user': user})
 
 @login_required
-def consent(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+def consent(request, id):
+    user = get_object_or_404(User, id=id)
     if request.method == 'POST':
         user.consent_RGPD = True
         user.save()
