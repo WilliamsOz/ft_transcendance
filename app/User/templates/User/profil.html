@@ -11,7 +11,16 @@
         {% csrf_token %}
         <button type="submit"></button>
     </form>
-    <a href="#" onclick="submitLogoutForm();">Se déconnecter</a>
+    <p><a href="#" onclick="submitLogoutForm();">Se déconnecter</a></p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-check form-switch custom-switch">
+            <label class="form-check-label" >Activer 2FA avec l'email</label>
+            <input class="form-check-input" type="checkbox" id="is_two_factor_enabled" name="is_two_factor_enabled" {% if form.is_two_factor_enabled.value %}checked{% endif %}>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Enregistrer</button>
+    </form>
 
     <script>
         function submitLogoutForm() {

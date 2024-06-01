@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from User.views import log, home, create_user, oauth_token, profil, redirect_to_home
+from User.views import log, home, create_user, oauth_token, profil, redirect_to_home, verify_code
 from Game.views import rapid_game_auth, create_tournament, play_game, home_game, player_registration, start_tournament, end_match, ia_game, play_ia_game
 from Game.views import morpion_game , save_morpion_game, game_history, game_over , morpion_form
 from django.contrib.auth.views import LogoutView
@@ -27,8 +27,9 @@ urlpatterns = [
 	path('', log, name='log'),
 	path('home/<int:id>/', home, name='home'),
 
-	path('create-user/', create_user, name='create-user'),
 	path('oauth/token/', oauth_token, name='oauth-token'),
+	path('create-user/', create_user, name='create-user'),
+	path('verify-code/', verify_code, name='verify-code'),
 	path('profil/<int:id>/', profil, name='profil'),
 	path('redirect/', redirect_to_home, name='redirect_to_home'),
 	path('logout/', LogoutView.as_view(template_name='User/login.html'), name='logout'),

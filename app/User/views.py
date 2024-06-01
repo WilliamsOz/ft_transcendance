@@ -11,21 +11,20 @@ from User.models import User
 
 from .utils import send_verification_code ##
 from .models import VerificationCode ##
+from .forms import CodeVerificationForm, TwoFactorToggleForm #
+import uuid
 
-def verify_code(request):
+@login_required
+def toggle_two_factor(request):
+    user = request.user
     if request.method == 'POST':
-        code = request.POST.get('code')
-        user = request.user
-        try:
-            verification_code = VerificationCode.objects.get(user=user, code=code)
-            if verification_code.is_valid():
-                login(request, user)
-                return redirect('home')  # Redirigez vers la page d'accueil après la connexion
-            else:
-                return render(request, 'verify_code.html', {'error': 'Code de vérification invalide ou expiré.'})
-        except VerificationCode.DoesNotExist:
-            return render(request, 'verify_code.html', {'error': 'Code de vérification invalide.'})
-    return render(request, 'verify_code.html')
+        form = TwoFactorToggleForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profil', id=user.id)
+    else:
+        form = TwoFactorToggleForm(instance=user)
+    return render(request, 'toggle_two_factor.html', {'form': form})
 
 @login_required
 def redirect_to_home(request):
@@ -70,9 +69,13 @@ def create_user(request):
 	if user_data:
 		try:
 			user = User.objects.get(login42=user_data.get('login'))
-			send_verification_code(user) ##
-			# login(request, user) ##
-			return redirect('verify_code')
+			if user.is_two_factor_enabled:
+				send_verification_code(user)
+				request.session['user_id'] = user.id
+				return redirect('verify-code')
+			else:
+				login(request, user)
+				return redirect('home', id=user.id)
 		except User.DoesNotExist:
 			user = User()
 			user.login42 = user_data.get('login')
@@ -81,12 +84,47 @@ def create_user(request):
 			user.profile_photo = user_data['image']['versions']['small']
 			user.save()
 			send_verification_code(user)
-			login(request, user)
+			request.session['user_id'] = user.id
 		return redirect('home', id=user.id)
 	return redirect('log')
 	
 @login_required
 def profil(request, id):
-	user = User.objects.get(id=id)
-	return render(request, 'User/profil.html', {'user': user})
+    user = request.user
+    if user.id != id:
+        return redirect('home', id=user.id)
+    if request.method == 'POST':
+        form = TwoFactorToggleForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profil', id=user.id)
+    else:
+        form = TwoFactorToggleForm(instance=user)
+    return render(request, 'User/profil.html', {'form': form, 'user': user})
 
+
+def verify_code(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('log')
+    user = User.objects.get(id=user_id)
+    error_message = None
+    if request.method == 'POST':
+        form = CodeVerificationForm(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data.get('code')
+            try:
+                uuid_code = uuid.UUID(code)
+                verification_code = VerificationCode.objects.get(user=user, code=uuid_code)
+                if verification_code.is_valid():
+                    login(request, user)
+                    return redirect('home', id=user.id)
+                else:
+                    error_message = 'Code de vérification invalide ou expiré.'
+            except (VerificationCode.DoesNotExist, ValueError, ValidationError):
+                error_message = 'Code de vérification invalide.'
+        else:
+            error_message = 'Le formulaire contient des erreurs.'
+    else:
+        form = CodeVerificationForm()
+    return render(request, 'User/verify_code.html', {'form': form, 'error_message': error_message})

@@ -44,6 +44,8 @@ RUN openssl req -newkey rsa:2048 -nodes -keyout /ssl/local.key -x509 -days 365 -
 # Modifier les permissions du certificat
 RUN chmod 644 /ssl/local.crt /ssl/local.key
 
+
+
 # Définition de l'utilisateur par défaut pour exécuter les commandes suivantes dans l'image en tant que 'user' et non 'root'.
 USER user
 
