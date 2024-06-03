@@ -114,7 +114,7 @@ def create_user(request):
 @login_required
 def profil(request, id):
 	user = User.objects.get(id=id)
-	return render(request, 'User/profil.html', {'user': user})
+	return render(request, 'templates/app/profil.html', {'user': user})
 
 def RGPD_Politique(request, id):
 	user = User.objects.get(id=id)
