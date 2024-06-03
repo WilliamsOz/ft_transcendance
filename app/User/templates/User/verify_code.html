@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vérification du code</title>
+</head>
+<body>
+    <h1>Vérification du code</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Se connecter</button>
+    </form>
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% endif %}
+    <form action="{% url 'log' %}" method="get">
+        <button type="submit">Retourner à la page de connexion</button>
+    </form>
+</body>
+</html>
