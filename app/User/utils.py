@@ -9,3 +9,4 @@ def send_verification_code(user):
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [user.email]
     send_mail(subject, message, email_from, recipient_list)
+

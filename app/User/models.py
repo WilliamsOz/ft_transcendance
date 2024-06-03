@@ -11,13 +11,13 @@ class User(AbstractUser):
 	profile_photo = models.URLField(verbose_name='Profil picture')
 	token = models.CharField(max_length=255)
 	is_two_factor_enabled = models.BooleanField(default=False)
+	totp_key = models.CharField(max_length=100, blank=True, null=True)
 
 	def __str__(self):
 		return self.login42
 
 	class Meta:
 		verbose_name_plural = "Users"
-
 
 class VerificationCode(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

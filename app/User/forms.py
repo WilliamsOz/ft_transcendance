@@ -19,3 +19,9 @@ class TwoFactorToggleForm(forms.ModelForm):
                 'id': 'is_two_factor_enabled'
             }),
         }
+
+class TOTPVerificationForm(forms.Form):
+    code = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={
+        'placeholder': 'Enter verification code',
+        'class': 'form-control'
+    }))

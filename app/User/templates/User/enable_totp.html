@@ -1,0 +1,9 @@
+{% extends 'templates/app/base.html' %}
+
+{% block content %}
+<h1>Activer TOTP</h1>
+<p>Scannez ce QR code avec votre application d'authentification :</p>
+<img src="https://api.qrserver.com/v1/create-qr-code/?data={{ totp_uri }}">
+<p>Ou entrez cette clé manuellement : {{ secret_key }}</p>
+<a href="{% url 'verify-totp' %}">Vérifier le code</a>
+{% endblock %}
