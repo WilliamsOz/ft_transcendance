@@ -20,6 +20,8 @@ from User.views import log, home, create_user, oauth_token, profil, redirect_to_
 from Game.views import rapid_game_auth, create_tournament, play_game, home_game, player_registration, start_tournament, end_match, ia_game, play_ia_game
 from Game.views import morpion_game , save_morpion_game, game_history, game_over , morpion_form
 from django.contrib.auth.views import LogoutView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
@@ -50,13 +52,16 @@ urlpatterns = [
 	path('home_game/play_game/<int:id>/<str:playerTwo>/', play_game, name='play_game'),
 
 	path('morpion_form/<int:id>/', morpion_form, name='morpion_form'),
-    path('morpion_game/<int:id>/<str:playerTwo>/', morpion_game, name='morpion_game'),
-    path('save_morpion_game/', save_morpion_game, name='save_morpion_game'),
-    path('game_over/<int:id>/<str:result>/', game_over, name='game_over'),
-    path('morpion_history/<int:id>/', game_history, name='game_history'),
-    path('RGPD_Politique/<int:id>/', RGPD_Politique, name='RGPD_Politique'),
+	path('morpion_game/<int:id>/<str:playerTwo>/', morpion_game, name='morpion_game'),
+	path('save_morpion_game/', save_morpion_game, name='save_morpion_game'),
+	path('game_over/<int:id>/<str:result>/', game_over, name='game_over'),
+	path('morpion_history/<int:id>/', game_history, name='game_history'),
+	path('RGPD_Politique/<int:id>/', RGPD_Politique, name='RGPD_Politique'),
 	path('consent/<int:id>/', consent, name='consent'),
-    path('delete_user/<int:id>/', delete_user, name='delete_user'),
+	path('delete_user/<int:id>/', delete_user, name='delete_user'),
 	
 	path('anonymize_user/<int:id>/', anonymize_user, name='anonymize_user'),
 ]
+
+if settings.DEBUG:
+	urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

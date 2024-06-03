@@ -119,10 +119,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+# URL utilisée pour référencer les fichiers statiques dans les templates
 STATIC_URL = '/static/'
 
+# Répertoire où collectstatic va placer les fichiers statiques collectés
+STATIC_ROOT = '/app/staticfiles/'
+
+# Répertoires supplémentaires où Django recherchera des fichiers statiques
 STATICFILES_DIRS = [
-	BASE_DIR / "static",
+	'/app/static/',
 ]
 
 # Default primary key field type

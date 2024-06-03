@@ -1,0 +1,69 @@
+@font-face {
+	font-family: 'Title';
+	src: url('/static/font/Title.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'PongGame';
+	src: url('/static/font/PongGame.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'FightFont';
+	src: url('/static/font/FightFont.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'Morpion';
+	src: url('/static/font/Morpion.ttf');
+}
+
+.title {
+	text-align: center;
+	font-family: 'Title', sans-serif;
+	font-weight: bold;
+	font-size: 2.5em;
+	margin-top: 21px;
+	color: black;
+}
+
+.fightFont{
+	font-family: 'FightFont', sans-serif;
+	font-size: 2.5em;
+	font-weight: bold;
+	color: #f3ec78;
+	background: linear-gradient(45deg, #8e44ad, #3498db);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.pong {
+	margin-top: 42px;
+	text-align: center;
+	font-family: 'PongGame', sans-serif;
+	font-weight: bold;
+	font-size: 5em;
+}
+
+.morpion {
+	margin-top: 42px;
+	text-align: center;
+	font-family: 'Morpion', sans-serif;
+	font-weight: bold;
+	font-size: 5em;
+}
+
+#pongCanvas {
+	background-color: black;
+	border: 1px solid rgb(255, 255, 255);
+	display: none; /* Cacher le canvas par défaut */
+}
+
+.container {
+	margin-top: 0px; /* Marge en haut */
+}
+
+.tab_tournament {
+	text-align: center;
+	margin-right: 21px;
+}
