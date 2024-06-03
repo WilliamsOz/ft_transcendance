@@ -113,13 +113,5 @@
     }
 </style>
 
-<script>
-    // Automatically show the modal if user has not given consent
-    $(document).ready(function() {
-        {% if not user.consent_RGPD %}
-            $('#consentModal').modal('show');
-        {% endif %}
-    });
-</script>
 
 {% endblock %}

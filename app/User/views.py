@@ -39,7 +39,7 @@ def anonymize_user(request, id):
         # Générer un login42 unique
         unique_login = False
         while not unique_login:
-            new_login42 = f'anonymous_{user.id}_{random.choice(string.ascii_lowercase)}{random.randint(1, 10000)}'
+            new_login42 = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
             if not User.objects.filter(login42=new_login42).exists():
                 unique_login = True
 
