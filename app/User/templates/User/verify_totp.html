@@ -4,6 +4,7 @@
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary mt-2">Vérifier</button>
 </form>
+<a href="{% url 'enable-totp' %}">Activer le code</a>
 {% if error %}
     <p style="color: red;">{{ error }}</p>
 {% endif %}

@@ -6,19 +6,24 @@ from django.http import JsonResponse, HttpResponseRedirect
 import json, random
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def home_game(request, id):
 	user = User.objects.get(id=id)
 	return render(request, 'Game/home_game.html', {'user': user})
 
+@login_required
 def play_game(request, id, playerOne, playerTwo):
 	user = User.objects.get(id=id)
 	return render(request, 'Game/play_game.html', {'user': user, 'playerOne': playerOne, 'playerTwo': playerTwo})
 
+@login_required
 def play_ia_game(request, id, playerOne):
 	user = User.objects.get(id=id)
 	return render(request, 'Game/play_ia_game.html', {'user': user, 'playerOne': playerOne})
 
+@login_required
 def rapid_game_auth(request, id):
 	user = User.objects.get(id=id)
 	if request.method == 'POST':
@@ -31,6 +36,7 @@ def rapid_game_auth(request, id):
 		form = PongGameForm()
 	return render(request, 'Game/rapid_game_auth.html', {'user': user, 'form': form})
 
+@login_required
 def ia_game(request, id):
 	user = User.objects.get(id=id)
 	if request.method == 'POST':
@@ -42,6 +48,7 @@ def ia_game(request, id):
 		form = PongGameFormIA()
 	return render(request, 'Game/ia_game.html', {'user': user, 'form': form})
 
+@login_required
 def create_tournament(request, id):
 	user = get_object_or_404(User, id=id)
 	if request.method == 'POST':
@@ -57,6 +64,7 @@ def create_tournament(request, id):
 		tournament_form = PongTournamentForm()
 	return render(request, 'Game/create_tournament.html', {'user': user, 'tournament_form': tournament_form})
 
+@login_required
 def player_registration(request, id, tournament_id):
 	# Récupère l'utilisateur et le tournoi, ou retourne une erreur 404
 	user = get_object_or_404(User, id=id)
@@ -75,6 +83,7 @@ def player_registration(request, id, tournament_id):
 		player_forms = [PlayerTournamentForm(prefix=str(i)) for i in range(tournament.numberOfPlayer)]
 	return render(request, 'Game/player_registration.html', {'user': user, 'player_forms': player_forms, 'tournament_id': tournament_id})
 
+@login_required
 def start_tournament(request, id, tournament_id):
 	# Récupère l'utilisateur
 	user = get_object_or_404(User, id=id)
@@ -99,7 +108,6 @@ def start_tournament(request, id, tournament_id):
 		'matches': matches,
 		'current_match': current_match
 	})
-
 
 def generate_matches(tournament):
 	# Vérifiez si des matchs existent déjà pour ce tournoi
@@ -198,7 +206,7 @@ def advance_tournament_round(tournament_id):
 		tournament.finished = True
 		tournament.save()
 
-
+@login_required
 def morpion_form(request, id):
 	user = User.objects.get(id=id)
 	initial_data = {'playerOne': user.login42}
@@ -213,7 +221,7 @@ def morpion_form(request, id):
 	return render(request, 'Game/morpion_form.html', {'user': user, 'form': form})
 
 
-
+@login_required
 def morpion_game(request, id, playerTwo):
 	user = User.objects.get(id=id)
 	
@@ -224,7 +232,7 @@ def morpion_game(request, id, playerTwo):
 	return render(request, 'Game/morpion_game.html', {'user': user, 'playerTwo': playerTwo, 'player_symbols': player_symbols})
 
 
-
+@login_required
 def save_morpion_game(request):
 	if request.method == "POST":
 		playerOne = request.POST.get('playerOne')
@@ -242,6 +250,7 @@ def save_morpion_game(request):
 		return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
 
 
+@login_required
 def game_over(request, id, result):
 	user = User.objects.get(id=id)
 	print(f"Result message: {result}") 
@@ -249,6 +258,7 @@ def game_over(request, id, result):
 
 
 
+@login_required
 def game_history(request, id):
     user = get_object_or_404(User, id=id)
     morpion_games = Morpion.objects.filter(playerOne=user.login42) | Morpion.objects.filter(playerTwo=user.login42)

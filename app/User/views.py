@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.contrib.auth import login, authenticate, logout
 from django.views.generic import View
-from django.contrib.auth.decorators import login_required 
+from django.contrib.auth.decorators import login_required
 from User.models import User
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
@@ -26,9 +26,8 @@ def enable_totp(request):
     if not user.totp_key:
         user.totp_key = generate_totp_key()
         user.save()
-    totp_uri = get_totp_uri(user, user.totp_key)
-    secret_key = user.totp_key
-    return render(request, 'User/enable_totp.html', {'totp_uri': totp_uri, 'secret_key': secret_key})
+        totp_uri = get_totp_uri(user, user.totp_key)
+    return render(request, 'User/enable_totp.html', {'totp_uri': totp_uri})
 
 def verify_totp(request):
     user_id = request.session.get('user_id')
