@@ -1,7 +1,6 @@
 version: "3"
 
 services:
-
   app:
     container_name: python
     env_file:
@@ -13,10 +12,10 @@ services:
       - "${APP_PORT}:${APP_PORT}"
     volumes:
       - ./app:/app
-    command:
-      sh -c "python manage.py makemigrations && \
-      python manage.py migrate && \
-      python manage.py collectstatic --noinput && \
+    command: >
+      sh -c "python3 manage.py makemigrations && 
+      python3 manage.py migrate && 
+      python3 manage.py collectstatic --noinput && 
       gunicorn --certfile=/ssl/local.crt --keyfile=/ssl/local.key --bind 0.0.0.0:${APP_PORT} app.wsgi:application"
     environment:
       DB_HOST: ${DB_HOST}

@@ -1,5 +1,6 @@
 from django import forms
 from Game.models import PongGame, PongGameIA, PongTournament, PlayersTournament , Morpion
+from django.db import models
 
 class PongGameForm(forms.ModelForm):
 	class Meta:

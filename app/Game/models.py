@@ -11,11 +11,19 @@ class PongGame(models.Model):
 	scorePlayerTwo = models.IntegerField(blank=False, default=0)
 	date = models.DateField(default=timezone.now, blank=False)
 
+	def clean(self):
+		if self.playerOne == self.playerTwo:
+			raise ValidationError("Les joueurs ne peuvent pas avoir le meme nom.")
+
+	def save(self, *args, **kwargs):
+		self.clean()
+		super(PongGame, self).save(*args, **kwargs)
+
 class PongGameIA(models.Model):
 	playerOne = models.CharField(blank=False, max_length=10)
 
 class PlayersTournament(models.Model):
-	name = models.CharField(max_length=100)
+	name = models.CharField(max_length=10)
 
 	def __str__(self):
 		return self.name
@@ -52,3 +60,10 @@ class Morpion(models.Model):
 	class Meta:
 		verbose_name_plural = "Morpion Games"
 	
+	def clean(self):
+		if self.playerOne == self.playerTwo:
+			raise ValidationError("Les joueurs ne peuvent pas avoir le meme nom.")
+
+	def save(self, *args, **kwargs):
+		self.clean()
+		super(PongGame, self).save(*args, **kwargs)

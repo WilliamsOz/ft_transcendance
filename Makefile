@@ -3,7 +3,7 @@ UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S), Darwin) # Mac
 	RM_IMAGE_COMMAND := docker image rm -f ft_transcendance-app
 else # Linux
-	RM_IMAGE_COMMAND := docker image rm -f ft_transcendance_app
+	RM_IMAGE_COMMAND := docker image rm -f ft_transcendance-app
 endif
 
 all:

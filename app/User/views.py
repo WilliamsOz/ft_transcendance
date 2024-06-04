@@ -88,16 +88,8 @@ def anonymize_user(request, id):
     user = get_object_or_404(User, id=id)
     if request.method == 'POST' and user == request.user:
         # Générer un login42 unique
-        unique_login = False
-        while not unique_login:
-            new_login42 = ''.join(random.choices(string.ascii_lowercase + string.digits, k=10))
-            if not User.objects.filter(login42=new_login42).exists():
-                unique_login = True
-
-        user.login42 = new_login42
         user.email = f'anonymous_{user.id}@example.com'
-        user.username = new_login42
-        print(user.username)
+        # print(user.username)
         user.profile_photo = 'https://www.gravatar.com/avatar/'
         user.save()
         messages.success(request, 'Vos données personnelles ont été anonymisées.')
